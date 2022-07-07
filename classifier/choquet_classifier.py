@@ -14,10 +14,10 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
         self.scaling = scaling
         self.threshold = threshold
 
-    def fit(self, X, y):
+    def fit(self, x, y):
         pass
 
-    def predict(self,X):
+    def predict(self, x):
         pass
 
     # ===============================================================
