@@ -1,9 +1,11 @@
 import unittest
 
+from sklearn.utils.estimator_checks import check_estimator
+from classifier.choquet_classifier import ChoquetClassifier
 
-class MyTestCase(unittest.TestCase):
-    def test_something(self):
-        self.assertEqual(True, False)  # add assertion here
+class TestChoquetClassifier(unittest.TestCase):
+    def test_compatibility(self):
+        check_estimator(ChoquetClassifier())
 
 
 if __name__ == '__main__':
