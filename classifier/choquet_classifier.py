@@ -27,7 +27,7 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
     def get_params(self, deep=True):
         return {'additivity' : self.additivity,
                 'scaling' : self.scaling,
-                'threshold' : self.scaling}
+                'threshold' : self.threshold}
 
     def _more_tags(self):
         return {'binary_only': True, 'poor_score': True}
