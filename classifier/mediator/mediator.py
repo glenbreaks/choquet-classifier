@@ -22,5 +22,8 @@ class Mediator:
     def predict_classes(self):
         pass
 
+    def check_for_regression_targets(self, y):
+        pass
+    
     def _get_normalized_X(self, X, f):
         pass
