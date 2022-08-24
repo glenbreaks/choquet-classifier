@@ -14,7 +14,7 @@ class FeatureTransformation:
     """
 
     def __init__(self, X):
-        self.function = self._initialize(X)
+        self.normalized = self._initialize(X)
 
     def _initialize(self, X):
         """Initialize the function.
@@ -37,7 +37,7 @@ class FeatureTransformation:
     def __getitem__(self, i):
         # use the item operator to access the feature transformation
         # component f_i
-        return self.function[:, i]
+        return self.normalized[:, i]
 
     #def __call__(self, x):
         # use the call operator to compute a normalized value for x
