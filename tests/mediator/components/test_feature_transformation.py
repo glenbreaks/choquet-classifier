@@ -20,5 +20,6 @@ class TestFeatureTransformation(unittest.TestCase):
         f = FeatureTransformation(data)
         np.testing.assert_almost_equal(f.normalized, normalized_data, 5)
 
-
+if __name__ == '__main__':
+    unittest.main()
 

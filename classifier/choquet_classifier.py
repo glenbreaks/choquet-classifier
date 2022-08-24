@@ -9,10 +9,9 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
 
     """
 
-    def __init__(self, additivity=None, scaling=None, threshold=None):
+    def __init__(self, additivity=2, regularization_parameter=None):
         self.additivity = additivity
-        self.scaling = scaling
-        self.threshold = threshold
+        self.regularization_parameter = regularization_parameter
 
     def fit(self, x, y):
         pass
