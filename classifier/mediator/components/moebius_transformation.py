@@ -1,24 +1,24 @@
 import numpy as np
-from itertools import chain, combinations
+
 
 
 class MoebiusTransformation:
 
     def __init__(self, additivity, X, y):
+        self.additivity = additivity
+        self.X = X
+        self.y = y
+        self.number_of_features = np.shape(self.X)[1]
         pass
 
-    def moebius_transform(self, additivity, X, y):
-        pass
+    #def moebius_transform(self, additivity, X, y):
+    #    result = list()
+    #    for i in range(additivity):
 
-    def get_powerset(self, s):
+    #    return array
 
-        result = list()
-        items = list(s)
-        powerset = chain.from_iterable(combinations(items, r) for r in range(len(items) + 1))
+    def _subset_coefficient(self, size):
+        return pow(-1, self.number_of_features - size)
 
-        for item in powerset:
-            result.append(frozenset(item))
-
-        return np.array(result)
 
     #def _update_powerset
