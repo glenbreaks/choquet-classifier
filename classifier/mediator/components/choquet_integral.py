@@ -8,7 +8,7 @@ class ChoquetIntegral:
     def compute_utility_value(self, x, capacity):
 
         result = 0
-        number_of_features = len(x)
+        number_of_subsets = h.get_feature_subset(x, 1)
 
         index_set_of_non_zero_features  = 0
         for j in range(number_of_features):

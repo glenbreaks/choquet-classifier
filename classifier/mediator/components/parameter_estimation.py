@@ -21,8 +21,9 @@ class ParameterEstimation:
 
     def compute_parameters(self, additivity, regularization_parameter=1):
         bounds, constraints = self._set_constraints(additivity)
-        # pack result from opt.minimize in dict (for moebius coeff)
-        result = opt.minimize()
+        # pack result from opt.minimize in dict (for moebius coefficients)
+        # result = opt.minimize()
+        pass
 
     def _set_constraints(self, additivity):
         """ Sets up the bounds and linear constraints for the optimization problem.
@@ -32,22 +33,37 @@ class ParameterEstimation:
         :return: constraints : list
                 consisting of the Bounds and Constraints instances
         """
-        number_of_moebius_coefficients = comb(self.number_of_features, additivity)
+        number_of_moebius_coefficients = 0
+        for i in range(1, additivity+1):
+            number_of_moebius_coefficients += comb(self.number_of_features, i)
 
-        # set the bounds - order is: regularization_parameter, gamma, threshold, m(T_1),...,m(T_n) with n being
-        # number_of_moebius_coefficients
-        lower_bound = [1, 1, 0]
-        upper_bound = [np.inf, np.inf, 1]
+        # set the bounds - order is: gamma, threshold, m(T_1),...,m(T_n) with n being
+        lower_bound = [1, 0]
+        upper_bound = [np.inf, 1]
 
-        linear_constraint_matrix = np.array([0, 0, 0])
+        boundary_constraint = np.array([0, 0])
 
         for i in range(number_of_moebius_coefficients):
             lower_bound.append(0)
             upper_bound.append(1)
-            linear_constraint_matrix = np.append(linear_constraint_matrix, 1)
+            linear_constraint_matrix = np.append(boundary_constraint, 1)
+
+        monotonicity_constraint = np.array([])
+
+        for j in range(number_of_moebius_coefficients - self.number_of_features):
+            # array for each condensed boundary condition without gamma, beta positions at beginning
+            arr = np.zeros(number_of_moebius_coefficients)
+            for i in range(arr.size):
+                counter = 0
+                # list of number of features
+                if i + 1 in h.get_dict_powerset(list(range(1, self.number_of_features))):
+                    arr[i] = - 1
+                    counter += 1
+                elif i + 1 == self.number_of_features + j:
+                    arr[i] = counter
+            monotonicity_constraint = np.append(monotonicity_constraint, arr, axis=0)
 
         bounds = opt.Bounds(lower_bound, upper_bound)
         linear_constraint = opt.LinearConstraint(linear_constraint_matrix, [1], [1])
 
-        return bounds, linear_constraint
-
+        return number_of_moebius_coefficients, monotonicity_constraint
