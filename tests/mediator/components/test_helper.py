@@ -9,19 +9,27 @@ class TestHelper(unittest.TestCase):
     def test_powerset(self):
         s = {2, 4, 6, 8}
 
-        powerset = h.get_powerset(s)
-        expected_powerset = [frozenset(), frozenset([2]), frozenset([4]), frozenset([6]), frozenset([8]),
+        powerset1 = h.get_powerset(s)
+        expected_powerset1 = [frozenset(), frozenset([2]), frozenset([4]), frozenset([6]), frozenset([8]),
                              frozenset([2, 4]),  frozenset([2, 6]),  frozenset([2, 8]),  frozenset([4, 6]),
                              frozenset([4, 8]),  frozenset([6, 8]), frozenset([2, 4, 6]),  frozenset([2, 4, 8]),
                              frozenset([2, 6, 8]),  frozenset([4, 6, 8]),  frozenset([2, 4, 6, 8])]
 
-        self.assertCountEqual(list(powerset), expected_powerset)
+        self.assertCountEqual(list(powerset1), expected_powerset1)
+
+        # test additivity powerset
+        powerset2 = h.get_powerset(s, 2)
+        expected_powerset2 = [frozenset(), frozenset([2]), frozenset([4]), frozenset([6]), frozenset([8]),
+                             frozenset([2, 4]), frozenset([2, 6]), frozenset([2, 8]), frozenset([4, 6]),
+                             frozenset([4, 8]), frozenset([6, 8])]
+
+        self.assertCountEqual(list(powerset2), expected_powerset2)
 
 
     def test_dict_powerset(self):
         s = {1, 2, 3, 4}
 
-        powerset = h.get_dict_powerset(s)
+        powerset = h.get_dict_powerset(s, 2)
         print(powerset)
 
 

@@ -13,10 +13,13 @@ def get_feature_subset(x, index):
     return frozenset(result)
 
 
-def get_powerset(s):
+def get_powerset(s, additivity=None):
     result = list()
     items = list(s)
-    powerset = chain.from_iterable(combinations(items, r) for r in range(len(items) + 1))
+    if additivity is not None:
+        powerset = _get_additivity_powerset(items, additivity)
+    else:
+        powerset = chain.from_iterable(combinations(items, r) for r in range(len(items) + 1))
 
     for item in powerset:
         result.append(frozenset(item))
@@ -24,9 +27,21 @@ def get_powerset(s):
     return np.array(result)
 
 
-def get_dict_powerset(s):
+def get_dict_powerset(s, additivity=None):
     powerset = get_powerset(s)
-    return dict(enumerate(powerset.flatten(), 0))
+    dict_powerset = dict(enumerate(powerset.flatten(), 0))
+    if additivity is not None:
+        dict_powerset = {key:val for key, val in dict_powerset.items() if len(val) <= additivity}
+
+    return dict_powerset
+
+
+def _get_additivity_powerset(items, additivity):
+    if len(items) < additivity:
+        raise Exception("additivity must be less than or equal to number of features")
+
+    powerset = chain.from_iterable(combinations(items, r) for r in range(additivity + 1))
+    return powerset
 
 
 def _get_permutation_position(x, sorted_x):

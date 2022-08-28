@@ -50,13 +50,13 @@ class ParameterEstimation:
 
         monotonicity_constraint = np.array([])
 
-        for j in range(number_of_moebius_coefficients - self.number_of_features):
+        for j in range(number_of_moebius_coefficients - self.number_of_features + 1):
             # array for each condensed boundary condition without gamma, beta positions at beginning
             arr = np.zeros(number_of_moebius_coefficients)
+            counter = 0
             for i in range(arr.size):
-                counter = 0
                 # list of number of features
-                if i + 1 in h.get_dict_powerset(list(range(1, self.number_of_features))):
+                if i + 1 in h.get_dict_powerset(list(range(1, self.number_of_features)), additivity):
                     arr[i] = - 1
                     counter += 1
                 elif i + 1 == self.number_of_features + j:
