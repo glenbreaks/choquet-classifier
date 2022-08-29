@@ -18,7 +18,7 @@ class TestHelper(unittest.TestCase):
         self.assertCountEqual(list(powerset1), expected_powerset1)
 
         # test additivity powerset
-        powerset2 = h.get_powerset(s, 2)
+        powerset2 = h.get_powerset(s, additivity=2  )
         expected_powerset2 = [frozenset(), frozenset([2]), frozenset([4]), frozenset([6]), frozenset([8]),
                              frozenset([2, 4]), frozenset([2, 6]), frozenset([2, 8]), frozenset([4, 6]),
                              frozenset([4, 8]), frozenset([6, 8])]

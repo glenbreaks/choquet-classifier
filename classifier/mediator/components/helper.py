@@ -14,6 +14,7 @@ def get_feature_subset(x, index):
 
 
 def get_powerset(s, additivity=None):
+    #TODO add feature number as parameter
     result = list()
     items = list(s)
     if additivity is not None:
@@ -31,7 +32,7 @@ def get_dict_powerset(s, additivity=None):
     powerset = get_powerset(s)
     dict_powerset = dict(enumerate(powerset.flatten(), 0))
     if additivity is not None:
-        dict_powerset = {key:val for key, val in dict_powerset.items() if len(val) <= additivity}
+        dict_powerset = {key: val for key, val in dict_powerset.items() if len(val) <= additivity}
 
     return dict_powerset
 
