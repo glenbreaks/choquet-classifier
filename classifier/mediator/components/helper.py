@@ -28,11 +28,11 @@ def get_powerset(s, additivity=None):
     return np.array(result)
 
 
-def get_dict_powerset(s, additivity=None):
+def get_powerset_dictionary(s, criterion, additivity):
     powerset = get_powerset(s)
     dict_powerset = dict(enumerate(powerset.flatten(), 0))
-    if additivity is not None:
-        dict_powerset = {key: val for key, val in dict_powerset.items() if len(val) <= additivity}
+    dict_powerset = {key: val for key, val in dict_powerset.items() if len(val) <= additivity and criterion in val}
+
 
     return dict_powerset
 

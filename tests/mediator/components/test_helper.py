@@ -26,11 +26,12 @@ class TestHelper(unittest.TestCase):
         self.assertCountEqual(list(powerset2), expected_powerset2)
 
 
-    def test_dict_powerset(self):
+    def test_powerset_dictionary(self):
         s = {1, 2, 3, 4}
 
-        powerset = h.get_dict_powerset(s, 2)
-        print(powerset)
+        powerset1 = h.get_powerset_dictionary(s, 1, 2)
+        powerset2 = h.get_powerset_dictionary(s, 2, 4)
+        print(powerset1)
 
 
     def test_get_feature_subset(self):
