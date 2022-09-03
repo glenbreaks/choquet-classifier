@@ -54,10 +54,11 @@ class ParameterEstimation:
         for j in range(number_of_moebius_coefficients - self.number_of_features):
             # array for each  boundary condition which needs to be met due
             # to additivity (without gamma, beta positions at beginning)
+            # range of j is number of monotonicity constraints
             # j + 1 is number of current feature
             arr = np.zeros(number_of_moebius_coefficients)
             array_counter = 0
-            monotonicity_array = h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)))[array_counter]
+            monotonicity_array = h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)))[j]
             for i in range(arr.size):
                 # list of number of features
                 counter = 0
