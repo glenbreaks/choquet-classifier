@@ -1,5 +1,5 @@
 import numpy as np
-from itertools import chain, combinations
+from itertools import chain, combinations, islice
 
 
 def get_feature_subset(x, index):
@@ -28,14 +28,18 @@ def get_powerset(s, additivity=None):
     return np.array(result)
 
 
-def get_powerset_dictionary(s, criterion, additivity):
+def get_powerset_dictionary(s):
     powerset = get_powerset(s)
-    dict_powerset = dict(enumerate(powerset.flatten(), 0))
-    dict_powerset = {key: val for key, val in dict_powerset.items() if len(val) <= additivity and criterion in val}
-
-
+    dict_powerset = dict(enumerate(powerset[1:].flatten(), 1))
+    #dict_powerset = {key: val for key, val in dict_powerset.items() if len(val) <= additivity and criterion in val}
     return dict_powerset
 
+def get_subset_dictionary_list(s):
+    dict = get_powerset_dictionary(s)
+    dict_list = list()
+    for i in list(dict.values())[len(s):]:
+        dict_list.append({key: val for key, val in dict.items() if val <= i})
+    return dict_list
 
 def _get_additivity_powerset(items, additivity):
     if len(items) < additivity:
@@ -43,7 +47,6 @@ def _get_additivity_powerset(items, additivity):
 
     powerset = chain.from_iterable(combinations(items, r) for r in range(additivity + 1))
     return powerset
-
 
 def _get_permutation_position(x, sorted_x):
     result = {}

@@ -50,21 +50,25 @@ class ParameterEstimation:
 
         monotonicity_constraint = np.array([])
         list2 = []
-        for j in range(number_of_moebius_coefficients - self.number_of_features + 1):
+        monotonicity = h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)))
+        for j in range(number_of_moebius_coefficients - self.number_of_features):
             # array for each  boundary condition which needs to be met due
             # to additivity (without gamma, beta positions at beginning)
             # j + 1 is number of current feature
             arr = np.zeros(number_of_moebius_coefficients)
-            counter = 0
+            array_counter = 0
+            monotonicity_array = h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)))[array_counter]
             for i in range(arr.size):
                 # list of number of features
-                if i + 1 in h.get_powerset_dictionary(list(range(1, self.number_of_features)), j + 1, additivity):
+                counter = 0
+                if i + 1 in list(monotonicity_array.keys()):
                     arr[i] = - 1
                     counter += 1
                 elif i + 1 == self.number_of_features + j:
                     arr[i] = counter
             #monotonicity_constraint = np.append(monotonicity_constraint, arr, axis=0)
             list2.append(arr)
+            array_counter += 1
 
         bounds = opt.Bounds(lower_bound, upper_bound)
         linear_constraint = opt.LinearConstraint(linear_constraint_matrix, [1], [1])

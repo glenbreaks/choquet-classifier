@@ -27,11 +27,14 @@ class TestHelper(unittest.TestCase):
 
 
     def test_powerset_dictionary(self):
-        s = {1, 2, 3, 4}
+        s = {1, 2, 3}
 
-        powerset1 = h.get_powerset_dictionary(s, 1, 2)
-        powerset2 = h.get_powerset_dictionary(s, 2, 4)
+        powerset1 = h.get_powerset_dictionary(s)
         print(powerset1)
+
+    def test_subset_dictionary(self):
+        s = {1, 2, 3}
+        print(h.get_subset_dictionary_list(s))
 
 
     def test_get_feature_subset(self):
