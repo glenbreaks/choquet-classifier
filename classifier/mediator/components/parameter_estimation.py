@@ -7,8 +7,8 @@ from .choquet_integral import ChoquetIntegral
 from . import helper as h
 
 
-# TODO: implement monotonicity condition of moebius implementation
-# TODO: mapping of moebius coefficient to subset
+# TODO: if additivity=None or 1 linear constraints are not to be created
+# TODO: mapping of moebius coefficient to subset in dictionary
 class ParameterEstimation:
 
     def __init__(self, X, y):
@@ -34,7 +34,7 @@ class ParameterEstimation:
                 consisting of the Bounds and Constraints instances
         """
         number_of_moebius_coefficients = 0
-        for i in range(1, additivity+1):
+        for i in range(1, additivity + 1):
             number_of_moebius_coefficients += comb(self.number_of_features, i)
 
         # set the bounds - order is: gamma, threshold, m(T_1),...,m(T_n) with n being
@@ -46,22 +46,27 @@ class ParameterEstimation:
         for i in range(number_of_moebius_coefficients):
             lower_bound.append(0)
             upper_bound.append(1)
-            linear_constraint_matrix = np.append(boundary_constraint, 1)
 
         bounds = opt.Bounds(lower_bound, upper_bound)
-        linear_constraint = opt.LinearConstraint(linear_constraint_matrix, [1], [1])
 
-        list3 = []
-        for j in h.get_subset_dictionary_list(list(range(1, self.number_of_features +1)), additivity):
+        monotonicity_constraints = []
+        for j in h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)), additivity):
             subsets = j
             arr = np.zeros(number_of_moebius_coefficients)
-            array_counter = 0
             for i in range(arr.size):
-                if i+1 in list(subsets.keys())[:-1]:
+                if i + 1 in list(subsets.keys())[:-1]:
                     arr[i] = - 1
                 elif i + 1 == list(subsets.keys())[-1]:
                     arr[i] = len(list(subsets.keys())[:-1])
-            list3.append(arr)
-            array_counter += 1
+            monotonicity_constraints.append(arr)
 
-        return list3
+        linear_constraint_matrix = [np.concatenate((boundary_constraint, np.ones(number_of_moebius_coefficients)))]
+        for arr in monotonicity_constraints:
+            array = np.concatenate((boundary_constraint, arr))
+            linear_constraint_matrix = np.append(linear_constraint_matrix, [array], axis=0)
+
+        lower_limits = np.zeros(linear_constraint_matrix.shape[0])
+        upper_limits = np.ones(linear_constraint_matrix.shape[0])
+
+        linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
+        return linear_constraint_matrix
