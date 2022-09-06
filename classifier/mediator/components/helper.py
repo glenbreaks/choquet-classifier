@@ -31,13 +31,14 @@ def get_powerset(s, additivity=None):
 def get_powerset_dictionary(s):
     powerset = get_powerset(s)
     dict_powerset = dict(enumerate(powerset[1:].flatten(), 1))
-    #dict_powerset = {key: val for key, val in dict_powerset.items() if len(val) <= additivity and criterion in val}
     return dict_powerset
 
-def get_subset_dictionary_list(s):
+def get_subset_dictionary_list(s, additivity):
     dict = get_powerset_dictionary(s)
     dict_list = list()
-    for i in list(dict.values())[len(s):]:
+    subset_list = list(dict.values())[len(s):]
+    additivity_subset_list = [x for x in subset_list if len(x) <= additivity]
+    for i in additivity_subset_list:
         dict_list.append({key: val for key, val in dict.items() if val <= i})
     return dict_list
 

@@ -18,7 +18,7 @@ class TestHelper(unittest.TestCase):
         self.assertCountEqual(list(powerset1), expected_powerset1)
 
         # test additivity powerset
-        powerset2 = h.get_powerset(s, additivity=2  )
+        powerset2 = h.get_powerset(s, additivity=2)
         expected_powerset2 = [frozenset(), frozenset([2]), frozenset([4]), frozenset([6]), frozenset([8]),
                              frozenset([2, 4]), frozenset([2, 6]), frozenset([2, 8]), frozenset([4, 6]),
                              frozenset([4, 8]), frozenset([6, 8])]
@@ -34,7 +34,8 @@ class TestHelper(unittest.TestCase):
 
     def test_subset_dictionary(self):
         s = {1, 2, 3}
-        print(h.get_subset_dictionary_list(s))
+        list = h.get_subset_dictionary_list(s, 2)
+        print(list)
 
 
     def test_get_feature_subset(self):

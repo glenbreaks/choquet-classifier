@@ -9,7 +9,7 @@ class TestParameterEstimation(unittest.TestCase):
 
         p = pest.ParameterEstimation(X, y)
 
-        constraints = p._set_constraints(2)
+        constraints = p._set_constraints(3)
         print(constraints)
 
 

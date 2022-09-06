@@ -48,30 +48,20 @@ class ParameterEstimation:
             upper_bound.append(1)
             linear_constraint_matrix = np.append(boundary_constraint, 1)
 
-        monotonicity_constraint = np.array([])
-        list2 = []
-        monotonicity = h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)))
-        for j in range(number_of_moebius_coefficients - self.number_of_features):
-            # array for each  boundary condition which needs to be met due
-            # to additivity (without gamma, beta positions at beginning)
-            # range of j is number of monotonicity constraints
-            # j + 1 is number of current feature
-            arr = np.zeros(number_of_moebius_coefficients)
-            array_counter = 0
-            monotonicity_array = h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)))[j]
-            for i in range(arr.size):
-                # list of number of features
-                counter = 0
-                if i + 1 in list(monotonicity_array.keys()):
-                    arr[i] = - 1
-                    counter += 1
-                elif i + 1 == self.number_of_features + j:
-                    arr[i] = counter
-            #monotonicity_constraint = np.append(monotonicity_constraint, arr, axis=0)
-            list2.append(arr)
-            array_counter += 1
-
         bounds = opt.Bounds(lower_bound, upper_bound)
         linear_constraint = opt.LinearConstraint(linear_constraint_matrix, [1], [1])
 
-        return list2
+        list3 = []
+        for j in h.get_subset_dictionary_list(list(range(1, self.number_of_features +1)), additivity):
+            subsets = j
+            arr = np.zeros(number_of_moebius_coefficients)
+            array_counter = 0
+            for i in range(arr.size):
+                if i+1 in list(subsets.keys())[:-1]:
+                    arr[i] = - 1
+                elif i + 1 == list(subsets.keys())[-1]:
+                    arr[i] = len(list(subsets.keys())[:-1])
+            list3.append(arr)
+            array_counter += 1
+
+        return list3
