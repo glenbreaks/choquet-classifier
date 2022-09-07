@@ -42,6 +42,8 @@ def get_subset_dictionary_list(s, additivity):
         dict_list.append({key: val for key, val in dict.items() if val <= i})
     return dict_list
 
+def get_moebius_matrix(X, additivity):
+
 def _get_additivity_powerset(items, additivity):
     if len(items) < additivity:
         raise Exception("additivity must be less than or equal to number of features")
