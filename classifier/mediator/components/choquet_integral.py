@@ -6,8 +6,7 @@ class ChoquetIntegral:
         self.moebius_transform = moebius_transform
 
 
-    #TODO:
-    def compute_aggregation_value(self, X):
+    def compute_aggregation_value(self, X, additivity):
         """
 
         Parameters
@@ -20,7 +19,7 @@ class ChoquetIntegral:
         integral_value : float
                 Integral value computed by the specified method.
         """
-        self.number_of_features = np.shape(X)[1]
+        self.number_of_features = np.shape(X)[0]
 
         result = 0
 
@@ -29,12 +28,15 @@ class ChoquetIntegral:
             result += self.moebius_transform[i] * X[i]
 
         # add additivity related values which contribute to aggregation value
-        #for i in range(self.number_of_features + 1, self.moebius_transform):
-        #    result
+        moebius_matrix = h.get_moebius_matrix(X, additivity)
+
+        for i in range(self.number_of_features + 1, self.moebius_transform):
+            row = moebius_matrix[i - self.number_of_features + 1]
+            criteria = row[:self.number_of_features]
+            criteria_in_instance = [X[j] for j in np.where(criteria == -1)[0]]
+            result += self.moebius_transform[i] * np.amin(criteria_in_instance)
 
 
-   # def _get_
+        return result
 
-    def find_feature_minimum(self, s):
-        return np.amin(s)
 

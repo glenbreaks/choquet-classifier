@@ -42,7 +42,9 @@ def get_subset_dictionary_list(s, additivity):
         dict_list.append({key: val for key, val in dict.items() if val <= i})
     return dict_list
 
+#TODO transfer get_moebius_matrix from parameter estimation to provide function to choquet integral
 def get_moebius_matrix(X, additivity):
+    pass
 
 def _get_additivity_powerset(items, additivity):
     if len(items) < additivity:
