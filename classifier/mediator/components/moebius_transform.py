@@ -2,7 +2,7 @@ import numpy as np
 
 
 
-class MoebiusTransformation:
+class MoebiusTransform:
 
     def __init__(self, additivity, X, y):
         self.additivity = additivity

@@ -33,6 +33,7 @@ def get_powerset_dictionary(s):
     dict_powerset = dict(enumerate(powerset[1:].flatten(), 1))
     return dict_powerset
 
+
 def get_subset_dictionary_list(s, additivity):
     dict = get_powerset_dictionary(s)
     dict_list = list()
@@ -42,9 +43,6 @@ def get_subset_dictionary_list(s, additivity):
         dict_list.append({key: val for key, val in dict.items() if val <= i})
     return dict_list
 
-#TODO transfer get_moebius_matrix from parameter estimation to provide function to choquet integral
-def get_moebius_matrix(X, additivity):
-    pass
 
 def _get_additivity_powerset(items, additivity):
     if len(items) < additivity:
@@ -52,6 +50,7 @@ def _get_additivity_powerset(items, additivity):
 
     powerset = chain.from_iterable(combinations(items, r) for r in range(additivity + 1))
     return powerset
+
 
 def _get_permutation_position(x, sorted_x):
     result = {}

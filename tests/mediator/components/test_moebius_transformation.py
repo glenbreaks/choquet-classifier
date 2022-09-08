@@ -1,4 +1,4 @@
-from classifier.mediator.components.moebius_transformation import MoebiusTransformation
+from classifier.mediator.components.moebius_transform import MoebiusTransformation
 import unittest
 
 

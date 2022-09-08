@@ -2,13 +2,10 @@ import numpy as np
 from scipy import optimize as opt
 from math import comb
 
-from . import moebius_transformation
-from .choquet_integral import ChoquetIntegral
 from . import helper as h
 
 
 # TODO: if additivity=None or 1 linear constraints are not to be created
-# TODO: mapping of moebius coefficient to subset in dictionary
 class ParameterEstimation:
 
     def __init__(self, X, y):
@@ -110,7 +107,7 @@ class ParameterEstimation:
 
         return linear_constraint_matrix
 
-    def _get_number_of_moebius_coefficients(self,additivity):
+    def _get_number_of_moebius_coefficients(self, additivity):
         number_of_moebius_coefficients = 0
 
         for i in range(1, additivity + 1):
