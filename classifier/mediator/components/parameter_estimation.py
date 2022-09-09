@@ -62,14 +62,14 @@ class ParameterEstimation:
 
         bounds = opt.Bounds(lower_bound, upper_bound)
 
-        linear_constraint_matrix = self._get_linear_constraint_matrix(number_of_moebius_coefficients, additivity)
+        #linear_constraint_matrix = self._get_linear_constraint_matrix(number_of_moebius_coefficients, additivity)
 
-        lower_limits = np.zeros(linear_constraint_matrix.shape[0])
-        upper_limits = np.ones(linear_constraint_matrix.shape[0])
+        #lower_limits = np.zeros(linear_constraint_matrix.shape[0])
+        #upper_limits = np.ones(linear_constraint_matrix.shape[0])
 
-        linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
+        #linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
 
-        return bounds, linear_constraint
+        return bounds
 
     def get_subset_matrix(self, number_of_moebius_coefficients, additivity):
         monotonicity_constraints = []
