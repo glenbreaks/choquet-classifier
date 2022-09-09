@@ -62,48 +62,40 @@ class ParameterEstimation:
 
         bounds = opt.Bounds(lower_bound, upper_bound)
 
-        linear_constraint_matrix = self._get_linear_constraint_matrix(number_of_moebius_coefficients, additivity)
+        #linear_constraint_matrix = self._get_linear_constraint_matrix(number_of_moebius_coefficients, additivity)
 
-        lower_limits = np.zeros(linear_constraint_matrix.shape[0])
-        upper_limits = np.ones(linear_constraint_matrix.shape[0])
+        #lower_limits = np.zeros(linear_constraint_matrix.shape[0])
+        #upper_limits = np.ones(linear_constraint_matrix.shape[0])
 
-        linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
+        #linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
 
-        return bounds, linear_constraint
+        return bounds
 
-    def get_moebius_matrix(self, additivity):
-        """
+    def get_subset_matrix(self, number_of_moebius_coefficients, additivity):
+        monotonicity_constraints = []
+        for j in h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)), additivity):
+            subsets = j
+            arr = np.zeros(number_of_moebius_coefficients)
+            for i in range(arr.size):
+                if i + 1 in list(subsets.keys())[:-1] or i + 1 == list(subsets.keys())[-1]:
+                    arr[i] = len(subsets[i+1])
+            monotonicity_constraints.append(arr)
 
-        :param additivity:
-        :return:
-        """
+        #linear_constraint_matrix = [np.concatenate((self.boundary_constraint, np.ones(number_of_moebius_coefficients)))]
+        #for arr in monotonicity_constraints:
+        #    array = np.concatenate((self.boundary_constraint, arr))
+        #    linear_constraint_matrix = np.append(linear_constraint_matrix, [array], axis=0)
 
+        moebius_matrix = np.array(monotonicity_constraints)
+        return moebius_matrix
+
+    def _get_linear_constraint_matrix(self, number_of_moebius_coefficients, additivity):
         number_of_moebius_coefficients = self._get_number_of_moebius_coefficients(additivity)
 
         linear_constraint_matrix = self._get_linear_constraint_matrix(number_of_moebius_coefficients, additivity)
 
         linear_constraint_matrix = np.delete(linear_constraint_matrix, 0, 0)
         linear_constraint_matrix = np.delete(linear_constraint_matrix, np.s_[:2], 1)
-
-        return linear_constraint_matrix
-
-
-    def _get_linear_constraint_matrix(self, number_of_moebius_coefficients, additivity):
-        monotonicity_constraints = []
-        for j in h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)), additivity):
-            subsets = j
-            arr = np.zeros(number_of_moebius_coefficients)
-            for i in range(arr.size):
-                if i + 1 in list(subsets.keys())[:-1]:
-                    arr[i] = - 1
-                elif i + 1 == list(subsets.keys())[-1]:
-                    arr[i] = len(list(subsets.keys())[:-1])
-            monotonicity_constraints.append(arr)
-
-        linear_constraint_matrix = [np.concatenate((self.boundary_constraint, np.ones(number_of_moebius_coefficients)))]
-        for arr in monotonicity_constraints:
-            array = np.concatenate((self.boundary_constraint, arr))
-            linear_constraint_matrix = np.append(linear_constraint_matrix, [array], axis=0)
 
         return linear_constraint_matrix
 

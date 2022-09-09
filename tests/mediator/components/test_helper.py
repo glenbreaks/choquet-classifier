@@ -27,13 +27,13 @@ class TestHelper(unittest.TestCase):
 
 
     def test_powerset_dictionary(self):
-        s = {1, 2, 3}
+        s = {1, 2, 3, 4}
 
         powerset1 = h.get_powerset_dictionary(s)
         print(powerset1)
 
     def test_subset_dictionary(self):
-        s = {1, 2, 3}
+        s = {1, 2, 3, 4}
         list = h.get_subset_dictionary_list(s, 2)
         print(list)
 
