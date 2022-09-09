@@ -12,6 +12,12 @@ class TestParameterEstimation(unittest.TestCase):
         constraints = p._set_constraints(3)
         print(constraints)
 
+    def test_moebius_matrix(self):
+        X = [[1, 2, 3, 5], [2, 3, 4, 1], [3, 4, 5, 2], [4, 5, 6, 6]]
+        y = [0, 1]
 
+        p = pest.ParameterEstimation(X, y)
+
+        print(p.get_subset_matrix(14, 3))
 if __name__ == '__main__':
     unittest.main()
