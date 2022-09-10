@@ -72,22 +72,52 @@ class ParameterEstimation:
         return bounds
 
     def get_subset_matrix(self, number_of_moebius_coefficients, additivity):
-        monotonicity_constraints = []
+        matrix = []
         for j in h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)), additivity):
             subsets = j
             arr = np.zeros(number_of_moebius_coefficients)
             for i in range(arr.size):
                 if i + 1 in list(subsets.keys())[:-1] or i + 1 == list(subsets.keys())[-1]:
                     arr[i] = len(subsets[i+1])
-            monotonicity_constraints.append(arr)
+            matrix.append(arr)
 
         #linear_constraint_matrix = [np.concatenate((self.boundary_constraint, np.ones(number_of_moebius_coefficients)))]
         #for arr in monotonicity_constraints:
         #    array = np.concatenate((self.boundary_constraint, arr))
         #    linear_constraint_matrix = np.append(linear_constraint_matrix, [array], axis=0)
 
-        moebius_matrix = np.array(monotonicity_constraints)
-        return moebius_matrix
+        subset_matrix = np.array(matrix)
+        return subset_matrix
+
+    def get_monotonicity_matrix(self, additivity):
+        number_of_moebius_coefficients = self._get_number_of_moebius_coefficients(additivity)
+        set_list = h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)), additivity)
+        #subset_matrix = self.get_subset_matrix(number_of_moebius_coefficients, additivity)
+
+        matrix = []
+        #for row in subset_matrix:
+        #    index = np.max(np.nonzero(row))
+        #    powerset = h.get_powerset_dictionary(list(range(1, self.number_of_features + 1)))[index]
+        #    powerset_list = h.get_subset_dictionary_list(powerset, additivity)
+        #    max_value = max(row)
+            #trfor i in range(max_value):
+            #    monotonicity_row = [1 for x in powerset ]
+
+
+            #for element in powerset_list[1:]
+            #    row1 = [1 for x in element]
+
+        for j in set_list:
+            counter = 0
+            for i in range(len(list(j.values())[-1])):
+                arr = np.zeros(number_of_moebius_coefficients)
+                row = [x for x in j.values() if len(x.intersection({i+1})) > 0]
+                matrix.append(row)
+
+
+
+        return matrix
+
 
     def _get_linear_constraint_matrix(self, number_of_moebius_coefficients, additivity):
         number_of_moebius_coefficients = self._get_number_of_moebius_coefficients(additivity)

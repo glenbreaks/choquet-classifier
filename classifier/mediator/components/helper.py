@@ -43,6 +43,9 @@ def get_subset_dictionary_list(s, additivity):
         dict_list.append({key: val for key, val in dict.items() if val <= i})
     return dict_list
 
+def get_max_subsets(s, additivity):
+    max_subsets = [x for x in get_subset_dictionary_list(s, additivity)]
+    return max_subsets
 
 def _get_additivity_powerset(items, additivity):
     if len(items) < additivity:

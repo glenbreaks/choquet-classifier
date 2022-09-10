@@ -33,10 +33,15 @@ class TestHelper(unittest.TestCase):
         print(powerset1)
 
     def test_subset_dictionary(self):
-        s = {1, 2, 3, 4}
-        list = h.get_subset_dictionary_list(s, 2)
+        s1 = {1, 2, 3}
+        s = frozenset({1, 2})
+        list = h.get_subset_dictionary_list(s, 3)
         print(list)
 
+    def test_max_subsets(self):
+        s = {1,2,3,4}
+        max_subsets = h.get_max_subsets(s, 3)
+        print(max_subsets[-1])
 
     def test_get_feature_subset(self):
         array_1 = np.array([4, 21, 1, 6, 9])
