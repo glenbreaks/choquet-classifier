@@ -3,6 +3,7 @@ from scipy import optimize as opt
 from math import comb
 
 from . import helper as h
+from .choquet_integral import ChoquetIntegral
 
 
 # TODO: if additivity=None or 1 linear constraints are not to be created
@@ -14,12 +15,31 @@ class ParameterEstimation:
         self.additivity = additivity
 
         self.number_of_features = np.shape(self.X)[1]
+        self.number_of_instances = np.shape(self.X)[0]
 
         # gamma, beta
         self.boundary_constraint = np.array([0, 0])
 
-    def _log_likelihood_function(self, dataset, parameters):
-        pass
+    def _log_likelihood_function(self, parameters):
+        #number_of_moebius_coefficients = self._get_number_of_moebius_coefficients()
+        choquet = ChoquetIntegral(self.X, self.y, self.additivity)
+
+        gamma = parameters[0]
+        beta = parameters[1]
+        moebius_coefficients = parameters[2:]
+
+        result = 0
+
+        for i in range(self.number_of_instances):
+            x = self.X[i]
+            y = self.y[i]
+
+            choquet_value = 0
+            for j in range(len(moebius_coefficients)):
+                choquet_value += moebius_coefficients[j] * choquet.feature_minima_of_instance(x)[j + 1]
+
+            result += -gamma*(1 - y)*(choquet_value - beta) - np.log(1 + np.exp(-gamma(choquet_value - beta)))
+
 
     def compute_parameters(self):
         """
@@ -63,14 +83,15 @@ class ParameterEstimation:
 
         bounds = opt.Bounds(lower_bound, upper_bound)
 
-        #linear_constraint_matrix = self._get_linear_constraint_matrix(number_of_moebius_coefficients, additivity)
+        linear_constraint_matrix = self._get_linear_constraint_matrix()
 
-        #lower_limits = np.zeros(linear_constraint_matrix.shape[0])
-        #upper_limits = np.ones(linear_constraint_matrix.shape[0])
+        lower_boundary_limit, upper_boundary_limit = ([1], [1])
+        lower_limits = np.concatenate((lower_boundary_limit, np.zeros(linear_constraint_matrix.shape[0])), axis=0)
+        upper_limits = np.concatenate((upper_boundary_limit, np.ones(linear_constraint_matrix.shape[0])), axis=0)
 
-        #linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
+        linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
 
-        return bounds
+        return bounds, linear_constraint
 
     def get_subset_matrix(self, number_of_moebius_coefficients):
         matrix = []
@@ -81,11 +102,6 @@ class ParameterEstimation:
                 if i + 1 in list(subsets.keys())[:-1] or i + 1 == list(subsets.keys())[-1]:
                     arr[i] = len(subsets[i+1])
             matrix.append(arr)
-
-        #linear_constraint_matrix = [np.concatenate((self.boundary_constraint, np.ones(number_of_moebius_coefficients)))]
-        #for arr in monotonicity_constraints:
-        #    array = np.concatenate((self.boundary_constraint, arr))
-        #    linear_constraint_matrix = np.append(linear_constraint_matrix, [array], axis=0)
 
         subset_matrix = np.array(matrix)
         return subset_matrix
@@ -107,7 +123,7 @@ class ParameterEstimation:
 
         return monotonicity_matrix
 
-    def get_linear_constraint_matrix(self):
+    def _get_linear_constraint_matrix(self):
         monotonicity_matrix = self.get_monotonicity_matrix()
         boundary_constraint = np.ones(self._get_number_of_moebius_coefficients())
 

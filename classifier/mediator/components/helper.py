@@ -13,7 +13,7 @@ def get_feature_subset(x, index):
     return frozenset(result)
 
 
-def get_powerset(s, additivity=None):
+def get_powerset(s, additivity):
     #TODO add feature number as parameter
     result = list()
     items = list(s)
@@ -28,14 +28,14 @@ def get_powerset(s, additivity=None):
     return np.array(result)
 
 
-def get_powerset_dictionary(s):
-    powerset = get_powerset(s)
+def get_powerset_dictionary(s, additivity):
+    powerset = get_powerset(s, additivity)
     dict_powerset = dict(enumerate(powerset[1:].flatten(), 1))
     return dict_powerset
 
 
 def get_subset_dictionary_list(s, additivity):
-    dict = get_powerset_dictionary(s)
+    dict = get_powerset_dictionary(s, additivity)
     dict_list = list()
     subset_list = list(dict.values())[len(s):]
     additivity_subset_list = [x for x in subset_list if len(x) <= additivity]

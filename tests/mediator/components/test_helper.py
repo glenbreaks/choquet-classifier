@@ -29,13 +29,13 @@ class TestHelper(unittest.TestCase):
     def test_powerset_dictionary(self):
         s = {1, 2, 3, 4}
 
-        powerset1 = h.get_powerset_dictionary(s)
+        powerset1 = h.get_powerset_dictionary(s, 2)
         print(powerset1)
 
     def test_subset_dictionary(self):
         s1 = {1, 2, 3}
         s = frozenset({1, 2})
-        list = h.get_subset_dictionary_list(s, 3)
+        list = h.get_subset_dictionary_list(s1 , 3)
         print(list)
 
     def test_max_subsets(self):
