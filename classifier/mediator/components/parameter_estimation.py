@@ -21,7 +21,6 @@ class ParameterEstimation:
         self.boundary_constraint = np.array([0, 0])
 
     def _log_likelihood_function(self, parameters):
-        #number_of_moebius_coefficients = self._get_number_of_moebius_coefficients()
         choquet = ChoquetIntegral(self.X, self.y, self.additivity)
 
         gamma = parameters[0]
@@ -38,10 +37,11 @@ class ParameterEstimation:
             for j in range(len(moebius_coefficients)):
                 choquet_value += moebius_coefficients[j] * choquet.feature_minima_of_instance(x)[j + 1]
 
-            result += -gamma*(1 - y)*(choquet_value - beta) - np.log(1 + np.exp(-gamma(choquet_value - beta)))
+            result += gamma*(1 - y[0])*(choquet_value - beta) + np.log(1 + np.exp(-gamma*(choquet_value - beta)))
 
+        return result
 
-    def compute_parameters(self):
+    def compute_parameters(self, parameters):
         """
 
         :param additivity:
@@ -59,8 +59,9 @@ class ParameterEstimation:
         """
         bounds, constraints = self._set_constraints()
         # pack result from opt.minimize in dict (for moebius coefficients)
-        # result = opt.minimize()
-        pass
+        x0 = np.array([])
+        result = opt.minimize(self._log_likelihood_function, x0, bounds=bounds, method='trust-constr', constraints=[constraints])
+        return result.x
 
     def _set_constraints(self):
         """ Sets up the bounds and linear constraints for the optimization problem.
@@ -71,6 +72,7 @@ class ParameterEstimation:
                 consisting of the Bounds and Constraints instances
         """
 
+        #TODO: flatten all numpy arrays for scipy
         number_of_moebius_coefficients = self._get_number_of_moebius_coefficients()
 
         # set the bounds - order is: gamma, threshold, m(T_1),...,m(T_n) with n being
