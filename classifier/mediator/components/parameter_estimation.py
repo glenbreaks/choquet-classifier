@@ -92,31 +92,19 @@ class ParameterEstimation:
     def get_monotonicity_matrix(self, additivity):
         number_of_moebius_coefficients = self._get_number_of_moebius_coefficients(additivity)
         set_list = h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)), additivity)
-        #subset_matrix = self.get_subset_matrix(number_of_moebius_coefficients, additivity)
 
         matrix = []
-        #for row in subset_matrix:
-        #    index = np.max(np.nonzero(row))
-        #    powerset = h.get_powerset_dictionary(list(range(1, self.number_of_features + 1)))[index]
-        #    powerset_list = h.get_subset_dictionary_list(powerset, additivity)
-        #    max_value = max(row)
-            #trfor i in range(max_value):
-            #    monotonicity_row = [1 for x in powerset ]
-
-
-            #for element in powerset_list[1:]
-            #    row1 = [1 for x in element]
-
         for j in set_list:
-            counter = 0
-            for i in range(len(list(j.values())[-1])):
+            max_subset = list(j.values())[-1]
+            for criterion in max_subset:
                 arr = np.zeros(number_of_moebius_coefficients)
-                row = [x for x in j.values() if len(x.intersection({i+1})) > 0]
-                matrix.append(row)
+                intersection_sets = [key for key, value in j.items() if len(value.intersection({criterion})) > 0]
+                monotonicity_array = [1 if index+1 in intersection_sets else 0 for index, x in enumerate(arr)]
+                matrix.append(monotonicity_array)
 
+        monotonicity_matrix = np.array(matrix)
 
-
-        return matrix
+        return monotonicity_matrix
 
 
     def _get_linear_constraint_matrix(self, number_of_moebius_coefficients, additivity):

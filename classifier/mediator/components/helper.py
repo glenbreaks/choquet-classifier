@@ -63,3 +63,4 @@ def _get_permutation_position(x, sorted_x):
         result[i + 1] = np.nonzero(x == sorted_x[i])[0][0] + 1
 
     return result
+

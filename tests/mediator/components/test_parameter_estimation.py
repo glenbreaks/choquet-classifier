@@ -26,6 +26,6 @@ class TestParameterEstimation(unittest.TestCase):
 
         p = pest.ParameterEstimation(X, y)
 
-        print(p.get_monotonicity_matrix( 2))
+        print(p.get_monotonicity_matrix( 3))
 if __name__ == '__main__':
     unittest.main()
