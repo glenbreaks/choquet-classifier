@@ -86,19 +86,19 @@ class ParameterEstimation:
             lower_bound.append(0)
             upper_bound.append(1)
 
-        bounds = opt.Bounds(lower_bound, upper_bound, keep_feasible=False)
+        bounds = opt.Bounds(lower_bound, upper_bound)
+
 
         linear_constraint_matrix = self._get_linear_constraint_matrix()
 
         lower_boundary_limit, upper_boundary_limit = ([1], [1])
-        lower_limits = np.concatenate((lower_boundary_limit, np.zeros(linear_constraint_matrix.shape[0])), axis=0)
-        upper_limits = np.concatenate((upper_boundary_limit, np.ones(linear_constraint_matrix.shape[0])), axis=0)
+        lower_limits = np.concatenate((lower_boundary_limit, np.zeros(linear_constraint_matrix.shape[0]-1)), axis=0)
+        upper_limits = np.concatenate((upper_boundary_limit, np.ones(linear_constraint_matrix.shape[0]-1)), axis=0)
 
         lower_limits = lower_limits.flatten()
         upper_limits = upper_limits.flatten()
 
-        linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits,
-                                                 keep_feasible=False)
+        linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
 
         return bounds, linear_constraint
 
