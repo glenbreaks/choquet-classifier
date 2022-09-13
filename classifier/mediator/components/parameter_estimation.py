@@ -41,7 +41,7 @@ class ParameterEstimation:
 
         return result
 
-    def compute_parameters(self, parameters):
+    def compute_parameters(self):
         """
 
         :param additivity:
@@ -58,9 +58,13 @@ class ParameterEstimation:
         function has form of: function = {g: x, b: y, 1: m({1}), 2: m({2}),..., }
         """
         bounds, constraints = self._set_constraints()
+
         # pack result from opt.minimize in dict (for moebius coefficients)
-        x0 = np.array([])
-        result = opt.minimize(self._log_likelihood_function, x0, bounds=bounds, method='trust-constr', constraints=[constraints])
+        x0 = np.concatenate(([1], np.ones(1 + self._get_number_of_moebius_coefficients())), axis=0)
+        #x0 = x0 / np.sum(x0)
+
+        result = opt.minimize(self._log_likelihood_function, x0, options={'verbose': 1}, bounds=bounds,
+                              method='trust-constr', constraints=constraints)
         return result.x
 
     def _set_constraints(self):
@@ -72,7 +76,6 @@ class ParameterEstimation:
                 consisting of the Bounds and Constraints instances
         """
 
-        #TODO: flatten all numpy arrays for scipy
         number_of_moebius_coefficients = self._get_number_of_moebius_coefficients()
 
         # set the bounds - order is: gamma, threshold, m(T_1),...,m(T_n) with n being
@@ -83,7 +86,7 @@ class ParameterEstimation:
             lower_bound.append(0)
             upper_bound.append(1)
 
-        bounds = opt.Bounds(lower_bound, upper_bound)
+        bounds = opt.Bounds(lower_bound, upper_bound, keep_feasible=False)
 
         linear_constraint_matrix = self._get_linear_constraint_matrix()
 
@@ -91,7 +94,11 @@ class ParameterEstimation:
         lower_limits = np.concatenate((lower_boundary_limit, np.zeros(linear_constraint_matrix.shape[0])), axis=0)
         upper_limits = np.concatenate((upper_boundary_limit, np.ones(linear_constraint_matrix.shape[0])), axis=0)
 
-        linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
+        lower_limits = lower_limits.flatten()
+        upper_limits = upper_limits.flatten()
+
+        linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits,
+                                                 keep_feasible=False)
 
         return bounds, linear_constraint
 

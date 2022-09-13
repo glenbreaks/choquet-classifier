@@ -9,7 +9,7 @@ class TestParameterEstimation(unittest.TestCase):
         X = [[1, 2, 3, 5], [2, 3, 4, 1], [3, 4, 5, 2], [4, 5, 6, 6]]
         y = [0, 1]
 
-        p = pest.ParameterEstimation(X, y, 3)
+        p = pest.ParameterEstimation(X, y, 2)
 
         constraints = p._set_constraints()
         print(constraints)
@@ -47,6 +47,14 @@ class TestParameterEstimation(unittest.TestCase):
         p = pest.ParameterEstimation(X, y, 2)
         print(p._log_likelihood_function(parameters))
 
+    def test_compute_parameters(self):
+        X = [[1, 2, 3, 5], [2, 3, 4, 1], [3, 4, 5, 2], [4, 5, 6, 6]]
+        y = [[1], [0], [1], [0]]
+
+        parameters = np.array([1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+
+        p = pest.ParameterEstimation(X, y, 2)
+        print(p.compute_parameters())
 
 if __name__ == '__main__':
     unittest.main()
