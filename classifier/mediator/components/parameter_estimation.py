@@ -6,12 +6,15 @@ from . import helper as h
 from .choquet_integral import ChoquetIntegral
 
 
-# TODO: if additivity=None or 1 linear constraints are not to be created
 class ParameterEstimation:
 
-    def __init__(self, X, y, additivity):
+    def __init__(self, X, y, additivity=None):
         self.X = X
         self.y = y
+
+        if additivity is None:
+            self.additivity = 1
+
         self.additivity = additivity
 
         self.number_of_features = np.shape(self.X)[1]
@@ -65,7 +68,12 @@ class ParameterEstimation:
 
         result = opt.minimize(self._log_likelihood_function, x0, options={'verbose': 1}, bounds=bounds,
                               method='trust-constr', constraints=constraints)
-        return result.x
+
+        moebius_sum = 0
+        for i in result.x[2:]:
+            moebius_sum += i
+
+        return result.x, moebius_sum
 
     def _set_constraints(self):
         """ Sets up the bounds and linear constraints for the optimization problem.
@@ -87,7 +95,6 @@ class ParameterEstimation:
             upper_bound.append(1)
 
         bounds = opt.Bounds(lower_bound, upper_bound)
-
 
         linear_constraint_matrix = self._get_linear_constraint_matrix()
 

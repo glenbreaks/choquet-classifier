@@ -37,10 +37,17 @@ def get_powerset_dictionary(s, additivity):
 def get_subset_dictionary_list(s, additivity):
     dict = get_powerset_dictionary(s, additivity)
     dict_list = list()
-    subset_list = list(dict.values())[len(s):]
+
+    if additivity == 1:
+        subset_list = list(dict.values())
+    else:
+        subset_list = list(dict.values())[len(s):]
+
     additivity_subset_list = [x for x in subset_list if len(x) <= additivity]
+
     for i in additivity_subset_list:
         dict_list.append({key: val for key, val in dict.items() if val <= i})
+
     return dict_list
 
 def get_max_subsets(s, additivity):

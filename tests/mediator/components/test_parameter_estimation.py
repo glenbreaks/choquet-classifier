@@ -26,7 +26,7 @@ class TestParameterEstimation(unittest.TestCase):
         X = [[1, 2, 3, 5], [2, 3, 4, 1], [3, 4, 5, 2], [4, 5, 6, 6]]
         y = [0, 1]
 
-        p = pest.ParameterEstimation(X, y, 3)
+        p = pest.ParameterEstimation(X, y, 2)
 
         print(p.get_monotonicity_matrix())
 
@@ -34,7 +34,7 @@ class TestParameterEstimation(unittest.TestCase):
         X = [[1, 2, 3, 5], [2, 3, 4, 1], [3, 4, 5, 2], [4, 5, 6, 6]]
         y = [[1], [0], [1], [0]]
 
-        p = pest.ParameterEstimation(X, y, 3)
+        p = pest.ParameterEstimation(X, y, 2)
 
         print(p._get_linear_constraint_matrix())
 
@@ -42,18 +42,18 @@ class TestParameterEstimation(unittest.TestCase):
         X = [[1, 2, 3, 5], [2, 3, 4, 1], [3, 4, 5, 2], [4, 5, 6, 6]]
         y = [[1], [0], [1], [0]]
 
-        parameters = np.array([1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+        parameters = np.array([1, 2, 1, 1, 1, 1])
 
-        p = pest.ParameterEstimation(X, y, 2)
+        p = pest.ParameterEstimation(X, y, 1)
         print(p._log_likelihood_function(parameters))
 
     def test_compute_parameters(self):
-        X = [[1, 2, 3, 5], [2, 3, 4, 1], [3, 4, 5, 2], [4, 5, 6, 6]]
-        y = [[1], [0], [1], [0]]
+        X = [[.25, .3, .7, .1], [.5, .625, .4, .75], [.35, .4, .5, .4], [.125, .5, .625, .6]]
+        y = [[1], [1], [1], [0]]
 
         parameters = np.array([1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
 
-        p = pest.ParameterEstimation(X, y, 2)
+        p = pest.ParameterEstimation(X, y, 1)
         print(p.compute_parameters())
 
 if __name__ == '__main__':
