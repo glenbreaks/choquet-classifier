@@ -8,14 +8,19 @@ from .choquet_integral import ChoquetIntegral
 
 class ParameterEstimation:
 
-    def __init__(self, X, y, additivity=None):
+    def __init__(self, X, y, additivity=None, regularization_parameter=None):
         self.X = X
         self.y = y
 
         if additivity is None:
             self.additivity = 1
+        else:
+            self.additivity = additivity
 
-        self.additivity = additivity
+        if regularization_parameter is None:
+            self.regularization_parameter = 1
+        else:
+            self.regularization_parameter = regularization_parameter
 
         self.number_of_features = np.shape(self.X)[1]
         self.number_of_instances = np.shape(self.X)[0]
@@ -40,7 +45,9 @@ class ParameterEstimation:
             for j in range(len(moebius_coefficients)):
                 choquet_value += moebius_coefficients[j] * choquet.feature_minima_of_instance(x)[j + 1]
 
-            result += gamma*(1 - y[0])*(choquet_value - beta) + np.log(1 + np.exp(-gamma*(choquet_value - beta)))
+            result += gamma * (1 - y[0]) * (choquet_value - beta) + np.log(
+                1 + np.exp(-gamma * (choquet_value - beta))) + \
+                      self._l1_regularization(moebius_coefficients)
 
         return result
 
@@ -64,7 +71,7 @@ class ParameterEstimation:
 
         # pack result from opt.minimize in dict (for moebius coefficients)
         x0 = np.concatenate(([1], np.ones(1 + self._get_number_of_moebius_coefficients())), axis=0)
-        #x0 = x0 / np.sum(x0)
+        # x0 = x0 / np.sum(x0)
 
         result = opt.minimize(self._log_likelihood_function, x0, options={'verbose': 1}, bounds=bounds,
                               method='trust-constr', constraints=constraints)
@@ -99,8 +106,8 @@ class ParameterEstimation:
         linear_constraint_matrix = self._get_linear_constraint_matrix()
 
         lower_boundary_limit, upper_boundary_limit = ([1], [1])
-        lower_limits = np.concatenate((lower_boundary_limit, np.zeros(linear_constraint_matrix.shape[0]-1)), axis=0)
-        upper_limits = np.concatenate((upper_boundary_limit, np.ones(linear_constraint_matrix.shape[0]-1)), axis=0)
+        lower_limits = np.concatenate((lower_boundary_limit, np.zeros(linear_constraint_matrix.shape[0] - 1)), axis=0)
+        upper_limits = np.concatenate((upper_boundary_limit, np.ones(linear_constraint_matrix.shape[0] - 1)), axis=0)
 
         lower_limits = lower_limits.flatten()
         upper_limits = upper_limits.flatten()
@@ -116,7 +123,7 @@ class ParameterEstimation:
             arr = np.zeros(number_of_moebius_coefficients)
             for i in range(arr.size):
                 if i + 1 in list(subsets.keys())[:-1] or i + 1 == list(subsets.keys())[-1]:
-                    arr[i] = len(subsets[i+1])
+                    arr[i] = len(subsets[i + 1])
             matrix.append(arr)
 
         subset_matrix = np.array(matrix)
@@ -132,7 +139,7 @@ class ParameterEstimation:
             for criterion in max_subset:
                 arr = np.zeros(number_of_moebius_coefficients)
                 intersection_sets = [key for key, value in j.items() if len(value.intersection({criterion})) > 0]
-                monotonicity_array = [1 if index+1 in intersection_sets else 0 for index, x in enumerate(arr)]
+                monotonicity_array = [1 if index + 1 in intersection_sets else 0 for index, x in enumerate(arr)]
                 matrix.append(monotonicity_array)
 
         monotonicity_matrix = np.array(matrix)
@@ -156,3 +163,5 @@ class ParameterEstimation:
 
         return number_of_moebius_coefficients
 
+    def _l1_regularization(self, moebius_coefficient):
+        return self.regularization_parameter * sum(abs(coefficient) for coefficient in moebius_coefficient)

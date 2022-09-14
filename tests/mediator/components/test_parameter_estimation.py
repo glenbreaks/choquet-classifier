@@ -56,5 +56,14 @@ class TestParameterEstimation(unittest.TestCase):
         p = pest.ParameterEstimation(X, y, 1)
         print(p.compute_parameters())
 
+    def test_l1_regularization(self):
+        X = [[.25, .3, .7, .1], [.5, .625, .4, .75], [.35, .4, .5, .4], [.125, .5, .625, .6]]
+        y = [[1], [1], [1], [0]]
+
+        moebius_coefficient = [1,1,1,1]
+        p = pest.ParameterEstimation(X, y, 1)
+
+        print(p._l1_regularization(moebius_coefficient))
+
 if __name__ == '__main__':
     unittest.main()
