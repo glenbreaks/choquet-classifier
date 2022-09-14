@@ -53,7 +53,7 @@ class TestParameterEstimation(unittest.TestCase):
 
         parameters = np.array([1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
 
-        p = pest.ParameterEstimation(X, y, 1)
+        p = pest.ParameterEstimation(X, y, 2)
         print(p.compute_parameters())
 
     def test_l1_regularization(self):

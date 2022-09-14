@@ -71,16 +71,20 @@ class ParameterEstimation:
 
         # pack result from opt.minimize in dict (for moebius coefficients)
         x0 = np.concatenate(([1], np.ones(1 + self._get_number_of_moebius_coefficients())), axis=0)
-        # x0 = x0 / np.sum(x0)
+        x0 = x0 / np.sum(x0)
 
         result = opt.minimize(self._log_likelihood_function, x0, options={'verbose': 1}, bounds=bounds,
                               method='trust-constr', constraints=constraints)
 
-        moebius_sum = 0
-        for i in result.x[2:]:
-            moebius_sum += i
+        set_list = h.get_powerset_dictionary(list(range(1, self.number_of_features + 1)), self.additivity)
+        parameter_dict = {'gamma': result.x[0], 'beta': result.x[1]}
 
-        return result.x, moebius_sum
+        moebius_results = result.x[2:]
+        moebius_dict = {subset: value for key1, subset in set_list.items()
+                        for value in moebius_results if key1 == np.where(moebius_results ==value)[0]+1}
+
+        parameter_dict.update(moebius_dict)
+        return parameter_dict
 
     def _set_constraints(self):
         """ Sets up the bounds and linear constraints for the optimization problem.
