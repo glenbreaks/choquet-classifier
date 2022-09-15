@@ -1,8 +1,12 @@
-from sklearn.utils.validation import check_X_y
-from sklearn.utils.validation import check_array
 import numpy as np
 
-from components.parameter_estimation import ParameterEstimation
+from .fitter import Fitter
+from .predictor import Predictor
+
+from sklearn.utils.validation import check_X_y
+from sklearn.utils.validation import check_array
+
+
 
 class Mediator:
     def __init__(self):
@@ -20,16 +24,29 @@ class Mediator:
 
         return X, y
 
-    def check_test_data(self):
-        pass
+    def check_test_data(self, X):
 
-    def fit_components(self, X, y, additivity):
+        X = check_array(X)
 
-        pass
+        if np.shape(X)[1] != self.number_of_features:
+            raise ValueError('Input data does not match number of features')
 
+    def fit_components(self, X, y, additivity, regularization_parameter):
+
+        self.number_of_features = np.shape(X)[1]
+
+        if additivity is not None and self.number_of_features < additivity:
+            raise ValueError('Additivity is greater than number of features')
+
+        fitter = Fitter()
+
+        self.feature_transformation = fitter.fit_feature_transformation(X)
+
+        normalized_X = self._get_normalized_X(X, self.feature_transformation)
     def predict_classes(self):
         pass
 
+    #Sven Meyer's implementation of the Sugeno Classifier
     def _check_for_regression_targets(self, y):
         for value in y:
             # check for numeric value
@@ -63,6 +80,4 @@ class Mediator:
             normalized_x.append(normalized_feature)
 
         return np.array(normalized_x)
-
-    #def _get_moebius_matrix(self, X, y, additivity):
-    #    return ParameterEstimation(X, y).get_moebius_matrix(additivity)
+jj
