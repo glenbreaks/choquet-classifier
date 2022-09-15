@@ -21,7 +21,22 @@ class Fitter:
 
         return feature_transformation
 
-    def fit_parameters(self, X, y):
-        pass
+    def fit_parameters(self, X, y,additivity, regularization_parameter):
+
+        if additivity is None:
+            additivity = 1
+        else:
+            additivity = additivity
+
+        if regularization_parameter is None:
+            regularization_parameter = 1
+        else:
+            regularization_parameter = regularization_parameter
+
+        parameter_estimation = ParameterEstimation(X, y, additivity, regularization_parameter)
+
+        function = parameter_estimation.compute_parameters()
+
+        return function
 
 

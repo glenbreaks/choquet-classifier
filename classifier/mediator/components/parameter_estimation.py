@@ -12,15 +12,9 @@ class ParameterEstimation:
         self.X = X
         self.y = y
 
-        if additivity is None:
-            self.additivity = 1
-        else:
-            self.additivity = additivity
+        self.additivity = additivity
 
-        if regularization_parameter is None:
-            self.regularization_parameter = 1
-        else:
-            self.regularization_parameter = regularization_parameter
+        self.regularization_parameter = regularization_parameter
 
         self.number_of_features = np.shape(self.X)[1]
         self.number_of_instances = np.shape(self.X)[0]

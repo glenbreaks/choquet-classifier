@@ -44,7 +44,7 @@ class TestParameterEstimation(unittest.TestCase):
 
         parameters = np.array([1, 2, 1, 1, 1, 1])
 
-        p = pest.ParameterEstimation(X, y, 1)
+        p = pest.ParameterEstimation(X, y, 2)
         print(p._log_likelihood_function(parameters))
 
     def test_compute_parameters(self):
