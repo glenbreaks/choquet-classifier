@@ -1,6 +1,6 @@
 import numpy as np
 
-from .fitter import Fitter
+from .estimator import Estimator
 from .predictor import Predictor
 
 from sklearn.utils.validation import check_X_y
@@ -31,6 +31,8 @@ class Mediator:
         if np.shape(X)[1] != self.number_of_features:
             raise ValueError('Input data does not match number of features')
 
+        return X
+
     def fit_components(self, X, y, additivity, regularization_parameter):
 
         self.number_of_features = np.shape(X)[1]
@@ -38,11 +40,12 @@ class Mediator:
         if additivity is not None and self.number_of_features < additivity:
             raise ValueError('Additivity is greater than number of features')
 
-        fitter = Fitter()
+        estimator = Estimator()
 
-        self.feature_transformation = fitter.fit_feature_transformation(X)
+        self.feature_transformation = estimator.fit_feature_transformation(X)
 
         normalized_X = self._get_normalized_X(X, self.feature_transformation)
+
     def predict_classes(self):
         pass
 
@@ -60,14 +63,7 @@ class Mediator:
         return True
 
     def _get_normalized_X(self, X, f):
-        result = list()
-
-        for x in X:
-            normalized_x = self._get_normalized_x(x, f)
-
-            result.append(normalized_x)
-
-        return np.array(result)
+        pass
 
     def _get_normalized_x(self, x, f):
         normalized_x = list()
@@ -80,4 +76,3 @@ class Mediator:
             normalized_x.append(normalized_feature)
 
         return np.array(normalized_x)
-jj

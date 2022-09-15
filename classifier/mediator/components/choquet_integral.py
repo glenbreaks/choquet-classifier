@@ -54,7 +54,6 @@ class ChoquetIntegral:
         return result
 
     def feature_minima_of_instance(self, instance):
-        #instance = self.X[instance - 1]
         features = list(range(1, len(instance) + 1))
 
         powerset_dict = h.get_powerset_dictionary(features, self.additivity)

@@ -4,7 +4,7 @@ from .components.feature_transformation import FeatureTransformation
 from .components.parameter_estimation import ParameterEstimation
 
 
-class Fitter:
+class Estimator:
 
     def __init__(self):
         pass
@@ -21,7 +21,7 @@ class Fitter:
 
         return feature_transformation
 
-    def fit_parameters(self, X, y,additivity, regularization_parameter):
+    def fit_parameters(self, X, y, additivity, regularization_parameter):
 
         if additivity is None:
             additivity = 1
