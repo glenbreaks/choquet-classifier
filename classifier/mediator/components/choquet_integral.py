@@ -1,15 +1,10 @@
 import numpy as np
 from . import helper as h
-from math import comb
 
 
 
 class ChoquetIntegral:
-    def __init__(self, X, y, additivity):
-        self.X = X
-        self.y = y
-
-        self.number_of_features = np.shape(X)[0]
+    def __init__(self, additivity):
         self.additivity = additivity
 
     def compute_utility_value(self, moebius_coefficients, instance):

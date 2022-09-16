@@ -7,7 +7,7 @@ class TestChoquetIntegral(unittest.TestCase):
         X = [1, 2, 3]
         y = [0, 1]
         moebius_transform = [0.4, 0.3, 0.2, 0.2, 0.6, 0.1]
-        choquet_integral = ChoquetIntegral(X_full, y, 2)
+        choquet_integral = ChoquetIntegral(2)
         result = choquet_integral.compute_utility_value(moebius_transform, X)
         print(result)
 
@@ -16,7 +16,7 @@ class TestChoquetIntegral(unittest.TestCase):
         X = [1, 2, 3]
         y = [0, 1]
 
-        choquet_integral = ChoquetIntegral(X_full, y, 2)
+        choquet_integral = ChoquetIntegral(2)
         result = choquet_integral.feature_minima_of_instance([.4, 0, .6])
         print(result)
 
