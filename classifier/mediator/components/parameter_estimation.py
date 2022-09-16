@@ -23,7 +23,7 @@ class ParameterEstimation:
         self.boundary_constraint = np.array([0, 0])
 
     def _log_likelihood_function(self, parameters):
-        choquet = ChoquetIntegral(self.X, self.y, self.additivity)
+        choquet = ChoquetIntegral(self.additivity)
 
         gamma = parameters[0]
         beta = parameters[1]

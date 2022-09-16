@@ -2,7 +2,6 @@ import numpy as np
 from . import helper as h
 
 
-
 class ChoquetIntegral:
     def __init__(self, additivity):
         self.additivity = additivity
@@ -13,7 +12,6 @@ class ChoquetIntegral:
             choquet_value += moebius_coefficients[j] * self.feature_minima_of_instance(instance)[j + 1]
 
         return choquet_value
-
 
     def feature_minima_of_instance(self, instance):
         features = list(range(1, len(instance) + 1))

@@ -9,7 +9,7 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
 
     """
 
-    def __init__(self, additivity=2, regularization_parameter=None):
+    def __init__(self, additivity=1, regularization_parameter=None):
         self.additivity = additivity
         self.regularization_parameter = regularization_parameter
 
@@ -19,6 +19,11 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
     def predict(self, x):
         pass
 
+    def predict_proba(self, X):
+        pass
+
+    def score(self, X, y, sample_weight=None):
+        pass
     # ===============================================================
     # Functions for compatibility with scikit-learn. Not for general usage
     # ===============================================================
