@@ -35,9 +35,7 @@ class ParameterEstimation:
             x = self.X[i]
             y = self.y[i]
 
-            choquet_value = 0
-            for j in range(len(moebius_coefficients)):
-                choquet_value += moebius_coefficients[j] * choquet.feature_minima_of_instance(x)[j + 1]
+            choquet_value = choquet.compute_utility_value(moebius_coefficients, x)
 
             result += gamma * (1 - y[0]) * (choquet_value - beta) + np.log(
                 1 + np.exp(-gamma * (choquet_value - beta))) + \
@@ -75,7 +73,7 @@ class ParameterEstimation:
 
         moebius_results = result.x[2:]
         moebius_dict = {subset: value for key1, subset in set_list.items()
-                        for value in moebius_results if key1 == np.where(moebius_results ==value)[0]+1}
+                        for value in moebius_results if key1 == np.where(moebius_results == value)[0] + 1}
 
         parameter_dict.update(moebius_dict)
         return parameter_dict
