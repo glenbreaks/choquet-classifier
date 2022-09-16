@@ -46,8 +46,10 @@ class Mediator:
 
         normalized_X = self._get_normalized_X(X, self.feature_transformation)
 
-    def predict_classes(self):
+    def predict_classes(self, X):
+        predictor = Predictor()
         pass
+
 
     #Sven Meyer's implementation of the Sugeno Classifier
     def _check_for_regression_targets(self, y):
