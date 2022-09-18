@@ -7,7 +7,6 @@ from sklearn.utils.validation import check_X_y
 from sklearn.utils.validation import check_array
 
 
-
 class Mediator:
     def __init__(self):
         self.number_of_features = 0
@@ -44,7 +43,16 @@ class Mediator:
 
         self.feature_transformation = estimator.fit_feature_transformation(X)
 
-        normalized_X = self._get_normalized_X(X, self.feature_transformation)
+        normalized_X = self.feature_transformation
+
+        parameters = estimator.fit_parameters(normalized_X, y, additivity, regularization_parameter)
+
+        self.scaling = estimator.get_scaling_factor()
+        self.threshold = estimator.get_threshold()
+
+        self.moebius_transform = estimator.get_moebius_transform_of_capacity()
+
+        return True
 
     def predict_classes(self, X):
         predictor = Predictor()
@@ -63,18 +71,3 @@ class Mediator:
                 return False
 
         return True
-
-    def _get_normalized_X(self, X, f):
-        pass
-
-    def _get_normalized_x(self, x, f):
-        normalized_x = list()
-        number_of_features = len(x)
-
-        for i in range(number_of_features):
-            feature = x[i]
-            normalized_feature = f[i](feature)
-
-            normalized_x.append(normalized_feature)
-
-        return np.array(normalized_x)

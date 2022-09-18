@@ -13,8 +13,11 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
         self.additivity = additivity
         self.regularization_parameter = regularization_parameter
 
-    def fit(self, x, y):
-        pass
+    def fit(self, X, y):
+        self.mediator_ = Mediator()
+
+        X, y = self.mediator_.check_train_data(X, y)
+
 
     def predict(self, x):
         pass
