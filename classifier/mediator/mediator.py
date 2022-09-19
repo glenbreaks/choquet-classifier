@@ -44,7 +44,7 @@ class Mediator:
         self.additivity = additivity
         self.feature_transformation = estimator.fit_feature_transformation(X)
 
-        normalized_X = self.feature_transformation
+        normalized_X = self.feature_transformation.normalized
 
         self.parameters = estimator.fit_parameters(normalized_X, y, additivity, regularization_parameter)
 
@@ -81,15 +81,5 @@ class Mediator:
 
         return True
 
-    def _get_normalized_X(self, X, f):
-
-        result = list()
-
-        for x in X:
-            normalized_x = self._get_normalized_x(x, f)
-            result.append(normalized_x)
-
-        return np.array(result)
-
-    def _get_normalized_x(self, x, f):
+    def _print_capacity(self):
         pass

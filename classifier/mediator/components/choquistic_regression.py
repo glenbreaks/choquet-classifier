@@ -12,9 +12,9 @@ class ChoquisticRegression:
     def compute_regression_value(self, instance):
         choquet_integral = ChoquetIntegral(self.additivity)
 
-        gamma = self.parameters[0]
-        beta = self.parameters[1]
-        moebius_coefficients = self.parameters[2:]
+        gamma = self.parameters['gamma']
+        beta = self.parameters['beta']
+        moebius_coefficients = list(self.parameters.values())[2:]
 
         utility_value = choquet_integral.compute_utility_value(moebius_coefficients, instance)
 

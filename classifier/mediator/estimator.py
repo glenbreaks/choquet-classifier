@@ -40,10 +40,10 @@ class Estimator:
         return self.parameter_dict
 
     def get_scaling_factor(self):
-        return self.parameter_dict.values()[0]
+        return list(self.parameter_dict.values())[0]
 
     def get_threshold(self):
-        return self.parameter_dict.values()[1]
+        return list(self.parameter_dict.values())[1]
 
     def get_moebius_transform_of_capacity(self):
         return dict(list(self.parameter_dict.items())[2:])

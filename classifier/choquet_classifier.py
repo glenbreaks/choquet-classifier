@@ -23,7 +23,11 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
 
         self.classes_, y = np.unique(y, return_inverse=True)
 
+        self.mediator_.fit_components(X, y, self.additivity, self.regularization_parameter)
 
+        self.n_features_in_ = self.mediator_.number_of_features
+
+        return self
 
     def predict(self, X):
         check_is_fitted(self)
@@ -44,12 +48,10 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
     # ===============================================================
 
     def get_params(self, deep=True):
-        return {'additivity' : self.additivity,
-                'scaling' : self.scaling,
-                'threshold' : self.threshold}
+        return {'additivity': self.additivity,
+                'scaling': self.mediator_.scaling,
+                'threshold': self.mediator_.threshold}
 
     def _more_tags(self):
         return {'binary_only': True, 'poor_score': True}
 
-    def _get_threshold(self):
-        return self.mediator_.threshold
