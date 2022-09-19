@@ -13,7 +13,7 @@ class Mediator:
 
     def check_train_data(self, X, y):
         """Check input data for training
-        'check_X_y' in scikitlearn doc:
+        'check_X_y' in scikit-learn doc:
 
         """
         X, y = check_X_y(X, y)
@@ -41,11 +41,12 @@ class Mediator:
 
         estimator = Estimator()
 
+        self.additivity = additivity
         self.feature_transformation = estimator.fit_feature_transformation(X)
 
         normalized_X = self.feature_transformation
 
-        parameters = estimator.fit_parameters(normalized_X, y, additivity, regularization_parameter)
+        self.parameters = estimator.fit_parameters(normalized_X, y, additivity, regularization_parameter)
 
         self.scaling = estimator.get_scaling_factor()
         self.threshold = estimator.get_threshold()
@@ -56,8 +57,16 @@ class Mediator:
 
     def predict_classes(self, X):
         predictor = Predictor()
-        pass
 
+        normalized_data = list()
+
+        for x in X:
+            normalized_x = self.feature_transformation(x)
+            normalized_data.append(normalized_x)
+
+        result = predictor.get_classes(normalized_data, self.additivity, self.parameters)
+
+        return result
 
     #Sven Meyer's implementation of the Sugeno Classifier
     def _check_for_regression_targets(self, y):
@@ -71,3 +80,16 @@ class Mediator:
                 return False
 
         return True
+
+    def _get_normalized_X(self, X, f):
+
+        result = list()
+
+        for x in X:
+            normalized_x = self._get_normalized_x(x, f)
+            result.append(normalized_x)
+
+        return np.array(result)
+
+    def _get_normalized_x(self, x, f):
+        pass

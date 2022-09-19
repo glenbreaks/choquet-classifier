@@ -34,12 +34,16 @@ class FeatureTransformation:
                     Array containing a _FeatureTransformationComponent f_i for
                     each feature.
                 """
-        return QuantileTransformer().fit_transform(X)
+        self.transformer = QuantileTransformer()
+        return self.transformer.fit_transform(X)
 
     def __getitem__(self, i):
         # use the item operator to access the feature transformation
         # component f_i
         return self.normalized[:, i]
+
+    def __call__(self, x):
+        return self.transformer.transform([x])
 
     #def __call__(self, x):
         # use the call operator to compute a normalized value for x
