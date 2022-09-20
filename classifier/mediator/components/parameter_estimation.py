@@ -23,11 +23,12 @@ class ParameterEstimation:
         self.boundary_constraint = np.array([0, 0])
 
     def _log_likelihood_function(self, parameters):
-        choquet = ChoquetIntegral(self.additivity)
 
         gamma = parameters[0]
         beta = parameters[1]
         moebius_coefficients = parameters[2:]
+
+        choquet = ChoquetIntegral(self.additivity, moebius_coefficients)
 
         result = 0
 
@@ -35,7 +36,7 @@ class ParameterEstimation:
             x = self.X[i]
             y = self.y[i]
 
-            choquet_value = choquet.compute_utility_value(moebius_coefficients, x)
+            choquet_value = choquet.compute_utility_value(x)
 
             result += gamma * (1 - y) * (choquet_value - beta) + np.log(
                 1 + np.exp(-gamma * (choquet_value - beta))) + \
