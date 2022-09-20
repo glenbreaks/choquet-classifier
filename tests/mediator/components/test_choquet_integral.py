@@ -6,8 +6,8 @@ class TestChoquetIntegral(unittest.TestCase):
         X_full = [[.4, .3, .6], [2, 3, 4], [3, 4, 5], [4, 5, 6]]
         X = [1, 2, 3]
         y = [0, 1]
-        moebius_transform = [0.4, 0.3, 0.2, 0.2, 0.6, 0.1]
-        choquet_integral = ChoquetIntegral(2)
+        moebius_transform = [0.4, 0.3, 0.2, 0.2, 0.6, 0.1, 0.2]
+        choquet_integral = ChoquetIntegral(3)
         result = choquet_integral.compute_utility_value(moebius_transform, X)
         print(result)
 

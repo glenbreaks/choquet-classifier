@@ -16,7 +16,7 @@ def get_feature_subset(x, index):
 def get_powerset(s, additivity):
     #TODO add feature number as parameter
     result = list()
-    items = list(s)
+    items = s
     if additivity is not None:
         powerset = _get_additivity_powerset(items, additivity)
     else:
@@ -55,11 +55,17 @@ def get_max_subsets(s, additivity):
     return max_subsets
 
 def _get_additivity_powerset(items, additivity):
+    result = list()
+
     if len(items) < additivity:
         raise Exception("additivity must be less than or equal to number of features")
 
     powerset = chain.from_iterable(combinations(items, r) for r in range(additivity + 1))
-    return powerset
+
+    for item in powerset:
+        result.append(frozenset(item))
+
+    return np.array(result)
 
 
 def _get_permutation_position(x, sorted_x):

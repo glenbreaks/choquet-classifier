@@ -1,3 +1,5 @@
+import numpy as np
+
 from sklearn.preprocessing import QuantileTransformer
 
 #TODO n_quantiles parameter
@@ -34,7 +36,7 @@ class FeatureTransformation:
                     Array containing a _FeatureTransformationComponent f_i for
                     each feature.
                 """
-        self.transformer = QuantileTransformer()
+        self.transformer = QuantileTransformer(n_quantiles=np.shape(X)[0])
         return self.transformer.fit_transform(X)
 
     def __getitem__(self, i):
@@ -43,7 +45,7 @@ class FeatureTransformation:
         return self.normalized[:, i]
 
     def __call__(self, x):
-        return self.transformer.transform([x])
+        return self.transformer.transform(x)
 
     #def __call__(self, x):
         # use the call operator to compute a normalized value for x

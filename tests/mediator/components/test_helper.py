@@ -32,6 +32,11 @@ class TestHelper(unittest.TestCase):
         powerset1 = h.get_powerset_dictionary(s, 1)
         print(powerset1)
 
+    def test_additivity_powerset(self):
+        s = [1,2,3]
+        powerset = h._get_additivity_powerset(s, 2)
+        print(powerset)
+
     def test_subset_dictionary(self):
         s1 = {1, 2, 3, 4}
         s = frozenset({1, 2})

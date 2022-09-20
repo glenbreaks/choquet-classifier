@@ -37,7 +37,7 @@ class ParameterEstimation:
 
             choquet_value = choquet.compute_utility_value(moebius_coefficients, x)
 
-            result += gamma * (1 - y[0]) * (choquet_value - beta) + np.log(
+            result += gamma * (1 - y) * (choquet_value - beta) + np.log(
                 1 + np.exp(-gamma * (choquet_value - beta))) + \
                       self._l1_regularization(moebius_coefficients)
 

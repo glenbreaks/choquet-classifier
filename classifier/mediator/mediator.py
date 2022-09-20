@@ -1,6 +1,6 @@
 import numpy as np
 
-from .estimator import Estimator
+from .fitter import Fitter
 from .predictor import Predictor
 
 from sklearn.utils.validation import check_X_y
@@ -8,14 +8,38 @@ from sklearn.utils.validation import check_array
 
 
 class Mediator:
+    """Mediator
+
+    Class to handle estimator and predictor class. Checks the input data, computes the parameters
+    of the Choquet classifier and does the classification.
+    """
+
     def __init__(self):
         self.number_of_features = 0
 
     def check_train_data(self, X, y):
         """Check input data for training
-        'check_X_y' in scikit-learn doc:
 
+        Compare 'check_X_y" in the documentation of scikit-learn for more information
+
+        Parameters
+        -------
+        X : array-like of shape (n_samples, n_features)
+            Input data, where n_samples is the number of samples and
+            n_features is the number of features.
+
+        y : array-like of shape (1, n_samples)
+            Target labels to X.
+
+        Returns
+        -------
+        X : array-like of shape (n_samples, n_features)
+            Formatted input data, where n_samples is the number of samples and
+            n_features is the number of features.
+        y : array-like of shape (1, n_samples)
+            Formatted target labels to X.
         """
+
         X, y = check_X_y(X, y)
 
         if not self._check_for_regression_targets(y):
@@ -24,6 +48,25 @@ class Mediator:
         return X, y
 
     def check_test_data(self, X):
+        """Check the input data for classification
+
+        Compare 'check_array' in scikit-learn documentation for more information
+
+        Parameters
+        -------
+        X : array-like of shape (n_samples, n_features)
+            Input data, where n_samples is the number of samples and
+            n_features is the number of features.
+        Returns
+        -------
+        X : array-like of shape (n_samples, n_features)
+            Formatted input data, where n_samples is the number of samples and
+            n_features is the number of features.
+
+        Raises
+        -------
+        ValueError, if a check should fail.
+        """
 
         X = check_array(X)
 
@@ -33,43 +76,96 @@ class Mediator:
         return X
 
     def fit_components(self, X, y, additivity, regularization_parameter):
+        """Fit the feature transformation and the parameters: threshold, scaling and moebius transform of
+        the capacity for a given input data.
+
+        Parameters
+        -------
+        X : array-like of shape (n_samples, n_features)
+            Input data, where n_samples is the number of samples
+            and n_features is the number of features.
+        y : array-like of shape (n_samples,)
+            Target labels to X.
+
+        additivity : int
+            Additivity(Hyperparameter of the Choquet classifier).
+
+        regularization_parameter : float or None
+            the regularization parameter of the L1-Regularization
+            in the parameter estimation. If None, regularization
+            will be set to 1 to estimate the parameters.
+
+        Returns
+        -------
+        True, indicating that all parameters have been computed.
+        """
 
         self.number_of_features = np.shape(X)[1]
+        self.additivity = additivity
 
         if additivity is not None and self.number_of_features < additivity:
             raise ValueError('Additivity is greater than number of features')
 
-        estimator = Estimator()
+        fitter = Fitter()
 
-        self.additivity = additivity
-        self.feature_transformation = estimator.fit_feature_transformation(X)
+        self.feature_transformation = fitter.fit_feature_transformation(X)
 
         normalized_X = self.feature_transformation.normalized
 
-        self.parameters = estimator.fit_parameters(normalized_X, y, additivity, regularization_parameter)
+        self.parameters = fitter.fit_parameters(normalized_X, y, additivity, regularization_parameter)
 
-        self.scaling = estimator.get_scaling_factor()
-        self.threshold = estimator.get_threshold()
+        self.scaling = fitter.get_scaling_factor()
+        self.threshold = fitter.get_threshold()
 
-        self.moebius_transform = estimator.get_moebius_transform_of_capacity()
+        self.moebius_transform = fitter.get_moebius_transform_of_capacity()
 
         return True
 
     def predict_classes(self, X):
+        """Predict classes for input data.
+
+        Predict classes for input data. The function fit_components
+        had to be called in advance to provide the feature transformation
+        and the parameters.
+
+        Parameters
+        -------
+        X : array-like of shape (n_samples, n_features)
+            Input data, where n_samples is the number of samples and
+            n_features is the number of features.
+
+        Returns
+        -------
+        result : ndarray of shape (1, n_samples)
+            Array containing the classes for the corresponding examples.
+        """
+
         predictor = Predictor()
 
-        normalized_data = list()
+        normalized_X = self.feature_transformation(X)
 
-        for x in X:
-            normalized_x = self.feature_transformation(x)
-            normalized_data.append(normalized_x)
-
-        result = predictor.get_classes(normalized_data, self.additivity, self.parameters)
+        result = predictor.get_classes(normalized_X, self.additivity, self.parameters)
 
         return result
 
-    #Sven Meyer's implementation of the Sugeno Classifier
     def _check_for_regression_targets(self, y):
+        """Check target data for regression targets.
+
+        Regression targets are considered to be real non integer numbers.
+        This check is necessary to be compatible with scikit-learn.
+        This check is copied from the Sugeno classifier by Sven Meyer:
+        https://github.com/smeyer198/sugeno-classifier/blob/main/classifier/mediator/mediator.py
+
+        Parameters
+        -------
+        y : array-like of shape (1,)
+            Target labels.
+
+        Returns
+        -------
+        False, if there is a regression target, true otherwise.
+        """
+
         for value in y:
             # check for numeric value
             if not (isinstance(value, (int, float))
@@ -81,5 +177,7 @@ class Mediator:
 
         return True
 
-    def _print_capacity(self):
-        pass
+    def _print_moebius_transform(self):
+        moebius_coefficient = self.parameters[2:]
+        for key, value in moebius_coefficient.items():
+            print(key, '->', value)

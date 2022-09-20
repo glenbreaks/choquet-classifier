@@ -19,5 +19,4 @@ class ChoquetIntegral:
         powerset_dict = h.get_powerset_dictionary(features, self.additivity)
 
         minima_dict = {key: np.amin([instance[i - 1] for i in value]) for key, value in powerset_dict.items()}
-
         return minima_dict
