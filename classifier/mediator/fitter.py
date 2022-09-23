@@ -1,6 +1,7 @@
 import numpy as np
 
 from .components.feature_transformation import FeatureTransformation
+from .components.feature_transformation2 import FeatureTransformation2
 from .components.parameter_estimation import ParameterEstimation
 
 
@@ -29,7 +30,7 @@ class Fitter:
             Instance of the fitted feature transformation.
         """
 
-        feature_transformation = FeatureTransformation(X)
+        feature_transformation = FeatureTransformation2(X)
 
         return feature_transformation
 

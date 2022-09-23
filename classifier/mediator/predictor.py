@@ -68,7 +68,6 @@ class Predictor:
         result = list()
         for x in X:
             regression_value = regression_model.compute_regression_value(x)
-
             cl = self._get_decision(regression_value)
 
             result.append(cl)

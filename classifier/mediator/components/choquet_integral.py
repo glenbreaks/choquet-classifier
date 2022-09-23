@@ -41,14 +41,16 @@ class ChoquetIntegral:
         """
 
         choquet_value = 0
+        feature_minimum_dictionary = self.feature_minima_of_instance(instance)
         for j in range(len(self.moebius_coefficients)):
-            choquet_value += self.moebius_coefficients[j] * self.feature_minima_of_instance(instance)[j + 1]
+
+            choquet_value += self.moebius_coefficients[j] * feature_minimum_dictionary[j + 1]
 
         return choquet_value
 
     def feature_minima_of_instance(self, instance):
         """Get minimal feature of every subset and store them
-        in a dictionary, with corresponding subset as key.
+        in a dictionary.
 
 
         Parameters
@@ -59,14 +61,17 @@ class ChoquetIntegral:
         Returns
         -------
         minima_dict: dict
-            Dictionary, containing all subsets as keys, and their
+            Dictionary, containing all insertion-ordered number of subsets as keys, and their
             corresponding minimal feature of instance. Dictionary
-            has the same insertion order as the moebius_coefficients dictionary.
+            has the same insertion order as the moebius_coefficients dictionary,
+            to guarantee an indexed-controlled calculation, i.e.
+            the value at key [n+1] in minima_dict corresponds
+            to the nth value in moebius_coefficients (the value is the minima
+            of all the features represented by the nth moebius_coefficient)
         """
 
         features = list(range(1, len(instance) + 1))
 
         powerset_dict = h.get_powerset_dictionary(features, self.additivity)
-
         minima_dict = {key: np.amin([instance[i - 1] for i in value]) for key, value in powerset_dict.items()}
         return minima_dict

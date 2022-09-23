@@ -30,6 +30,7 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
     """
 
     def __init__(self, additivity=1, regularization_parameter=None):
+        self.mediator_ = None
         self.additivity = additivity
         self.regularization_parameter = regularization_parameter
 

@@ -110,7 +110,7 @@ class Mediator:
 
         self.feature_transformation = fitter.fit_feature_transformation(X)
 
-        normalized_X = self.feature_transformation.normalized
+        normalized_X = self._get_normalized_X(X, self.feature_transformation)
 
         self.parameters = fitter.fit_parameters(normalized_X, y, additivity, regularization_parameter)
 
@@ -142,11 +142,11 @@ class Mediator:
 
         predictor = Predictor()
 
-        normalized_X = self.feature_transformation(X)
+        normalized_X = self._get_normalized_X(X, self.feature_transformation)
 
         result = predictor.get_classes(normalized_X, self.additivity, self.parameters)
 
-        return result
+        return result.ravel()
 
     def _check_for_regression_targets(self, y):
         """Check target data for regression targets.
@@ -181,3 +181,53 @@ class Mediator:
         moebius_coefficient = self.parameters[2:]
         for key, value in moebius_coefficient.items():
             print(key, '->', value)
+
+    def _get_normalized_X(self, X, f):
+        """Normalize the input data using a Feature Transformation.
+        Parameters
+        -------
+        X : array-like of shape (n_samples, n_features)
+            Input data, where n_samples is the number of samples and
+            n_features is the number of features.
+        f : FeatureTransformation
+            Feature Transformation.
+        Returns
+        -------
+        result : ndarray of shape (n_samples, n_features)
+            Normalized input data, where n_samples is the number of samples
+            and n_features the number of features.
+        """
+
+        result = list()
+
+        for x in X:
+            normalized_x = self._get_normalized_x(x, f)
+
+            result.append(normalized_x)
+
+        return np.array(result)
+
+    def _get_normalized_x(self, x, f):
+        """Normalize example using a Feature Transformation.
+        Parameters
+        -------
+        x : array-like of shape (1, n_features)
+            Example, where n_features is the number of features.
+        f : FeatureTransformation
+            Feature Transformation.
+        Returns
+        -------
+        normalized_x : ndarray
+            Normalized example.
+        """
+
+        normalized_x = list()
+        number_of_features = len(x)
+
+        for i in range(number_of_features):
+            feature = x[i]
+            normalized_feature = f[i](feature)
+
+            normalized_x.append(normalized_feature)
+
+        return np.array(normalized_x)
