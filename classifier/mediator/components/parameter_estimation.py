@@ -45,10 +45,6 @@ class ParameterEstimation:
 
     def compute_parameters(self):
         """
-
-        :param additivity:
-        :param regularization_parameter:
-
         Returns
         ----------
         function: dict
@@ -81,10 +77,6 @@ class ParameterEstimation:
     def _set_constraints(self):
         """ Sets up the bounds and linear constraints for the optimization problem.
             using the Bounds and Constraints classes from scipy.optimize.
-
-        :param additivity: additivity of underlying capacity
-        :return: constraints : list
-                consisting of the Bounds and Constraints instances
         """
 
         number_of_moebius_coefficients = self._get_number_of_moebius_coefficients()
@@ -111,19 +103,6 @@ class ParameterEstimation:
         linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
 
         return bounds, linear_constraint
-
-    def get_subset_matrix(self, number_of_moebius_coefficients):
-        matrix = []
-        for j in h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)), self.additivity):
-            subsets = j
-            arr = np.zeros(number_of_moebius_coefficients)
-            for i in range(arr.size):
-                if i + 1 in list(subsets.keys())[:-1] or i + 1 == list(subsets.keys())[-1]:
-                    arr[i] = len(subsets[i + 1])
-            matrix.append(arr)
-
-        subset_matrix = np.array(matrix)
-        return subset_matrix
 
     def get_monotonicity_matrix(self):
         number_of_moebius_coefficients = self._get_number_of_moebius_coefficients()

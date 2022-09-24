@@ -12,7 +12,7 @@ class TestMediator(unittest.TestCase):
         X = check_array(X)
         fit_comp = mediator.fit_components(X,y, 3, 1)
         predict = mediator.predict_classes(Z)
-        print(fit_comp, predict, mediator.moebius_transform)
+        print(predict, mediator.parameters)
 
 if __name__ == '__main__':
     unittest.main()

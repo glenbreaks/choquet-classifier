@@ -14,7 +14,6 @@ def get_feature_subset(x, index):
 
 
 def get_powerset(s, additivity):
-    #TODO add feature number as parameter
     result = list()
     items = s
     if additivity is not None:
@@ -35,24 +34,26 @@ def get_powerset_dictionary(s, additivity):
 
 
 def get_subset_dictionary_list(s, additivity):
-    dict = get_powerset_dictionary(s, additivity)
+    powerset_dict = get_powerset_dictionary(s, additivity)
     dict_list = list()
 
     if additivity == 1:
-        subset_list = list(dict.values())
+        subset_list = list(powerset_dict.values())
     else:
-        subset_list = list(dict.values())[len(s):]
+        subset_list = list(powerset_dict.values())[len(s):]
 
     additivity_subset_list = [x for x in subset_list if len(x) <= additivity]
 
     for i in additivity_subset_list:
-        dict_list.append({key: val for key, val in dict.items() if val <= i})
+        dict_list.append({key: val for key, val in powerset_dict.items() if val <= i})
 
     return dict_list
+
 
 def get_max_subsets(s, additivity):
     max_subsets = [x for x in get_subset_dictionary_list(s, additivity)]
     return max_subsets
+
 
 def _get_additivity_powerset(items, additivity):
     result = list()
@@ -76,4 +77,3 @@ def _get_permutation_position(x, sorted_x):
         result[i + 1] = np.nonzero(x == sorted_x[i])[0][0] + 1
 
     return result
-

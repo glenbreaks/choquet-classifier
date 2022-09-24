@@ -9,7 +9,7 @@ class TestHelper(unittest.TestCase):
     def test_powerset(self):
         s = {2, 4, 6, 8}
 
-        powerset1 = h.get_powerset(s)
+        powerset1 = h.get_powerset(s, 4)
         expected_powerset1 = [frozenset(), frozenset([2]), frozenset([4]), frozenset([6]), frozenset([8]),
                              frozenset([2, 4]),  frozenset([2, 6]),  frozenset([2, 8]),  frozenset([4, 6]),
                              frozenset([4, 8]),  frozenset([6, 8]), frozenset([2, 4, 6]),  frozenset([2, 4, 8]),
@@ -28,8 +28,7 @@ class TestHelper(unittest.TestCase):
 
     def test_powerset_dictionary(self):
         s = {1, 2, 3, 4}
-
-        powerset1 = h.get_powerset_dictionary(s, 1)
+        powerset1 = h.get_powerset_dictionary(s, 2)
         print(powerset1)
 
     def test_additivity_powerset(self):
@@ -46,7 +45,7 @@ class TestHelper(unittest.TestCase):
     def test_max_subsets(self):
         s = {1,2,3,4}
         max_subsets = h.get_max_subsets(s, 3)
-        print(max_subsets[-1])
+        print(max_subsets)
 
     def test_get_feature_subset(self):
         array_1 = np.array([4, 21, 1, 6, 9])

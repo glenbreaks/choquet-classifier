@@ -84,6 +84,6 @@ class Predictor:
         """
 
         if regression_value >= 0.5:
-            return np.array([1])
+            return regression_value #np.array([1])
         else:
-            return np.array([0])
+            return regression_value #np.array([0])
