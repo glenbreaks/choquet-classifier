@@ -23,7 +23,6 @@ class ParameterEstimation:
         self.boundary_constraint = np.array([0, 0])
 
     def _log_likelihood_function(self, parameters):
-
         gamma = parameters[0]
         beta = parameters[1]
         moebius_coefficients = parameters[2:]
@@ -38,8 +37,9 @@ class ParameterEstimation:
 
             choquet_value = choquet.compute_utility_value(x)
 
-            result += gamma * (1 - y) * (choquet_value - beta) + np.log(1 + np.exp(-gamma * (choquet_value - beta))) + \
-                      self._l1_regularization(moebius_coefficients)
+            result += gamma * (1 - y) * (choquet_value - beta) + np.log(1 + np.exp(-gamma * (choquet_value - beta)))
+
+        result += self._l1_regularization(moebius_coefficients)
 
         return result
 
@@ -57,7 +57,7 @@ class ParameterEstimation:
         """
         bounds, constraints = self._set_constraints()
 
-        # pack result from opt.minimize in dict (for moebius coefficients)
+        # set random normalized starting vector
         x0 = np.concatenate(([1], np.ones(1 + self._get_number_of_moebius_coefficients())), axis=0)
         x0 = x0 / np.sum(x0)
 
@@ -107,7 +107,6 @@ class ParameterEstimation:
     def get_monotonicity_matrix(self):
         number_of_moebius_coefficients = self._get_number_of_moebius_coefficients()
         set_list = h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)), self.additivity)
-
         matrix = []
         for j in set_list:
             max_subset = list(j.values())[-1]

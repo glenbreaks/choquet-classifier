@@ -10,7 +10,8 @@ class TestMediator(unittest.TestCase):
         Z = [[3, 2, 1],[1, 2, 3]]
         mediator = Mediator()
         X = check_array(X)
-        fit_comp = mediator.fit_components(X,y, 3, 1)
+        Z = check_array(Z)
+        mediator.fit_components(X, y, 3, 1)
         predict = mediator.predict_classes(Z)
         print(predict, mediator.parameters)
 

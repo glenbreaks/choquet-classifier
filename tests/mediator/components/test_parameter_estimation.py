@@ -20,7 +20,7 @@ class TestParameterEstimation(unittest.TestCase):
         number_of_linear_constraints = 1 + number_of_monotonicity_constraints
 
         bounds, linear_constraints = p._set_constraints()
-
+        print(bounds)
         self.assertEqual(len(bounds.lb), number_of_parameters)
         self.assertEqual(len(bounds.ub), number_of_parameters)
 
@@ -34,7 +34,7 @@ class TestParameterEstimation(unittest.TestCase):
         X = [[1, 2, 3, 5], [2, 3, 4, 1], [3, 4, 5, 2], [4, 5, 6, 6]]
         y = [0, 1]
 
-        p = est.ParameterEstimation(X, y, 2, 1)
+        p = est.ParameterEstimation(X, y, 3, 1)
 
         print(p.get_monotonicity_matrix())
 

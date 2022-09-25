@@ -17,8 +17,8 @@ class TestChoquetIntegral(unittest.TestCase):
         y = [0, 1]
 
         moebius_transform = [0.4, 0.3, 0.2, 0.2, 0.6, 0.1, 0.2]
-        choquet_integral = ChoquetIntegral(3, moebius_transform)
-        result = choquet_integral.feature_minima_of_instance([.4, 0, .6])
+        choquet_integral = ChoquetIntegral(4, moebius_transform)
+        result = choquet_integral.feature_minima_of_instance([.4, 0, .6, 0.3])
         print(result)
 
 if __name__ == '__main__':
