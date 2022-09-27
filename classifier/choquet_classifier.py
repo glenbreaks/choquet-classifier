@@ -26,7 +26,7 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
 
     regularization_parameter: in, default=None
         the regularization parameter of the L1-Regularization in the parameter estimation. Determines the strength of
-        regularization of the fitting process. This parameter was used in an evaluation part of a Bachelor thesis.
+        regularization of the fitting process.
     """
 
     def __init__(self, additivity=1, regularization_parameter=None):

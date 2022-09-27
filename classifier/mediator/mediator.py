@@ -16,6 +16,7 @@ class Mediator:
 
     def __init__(self):
         self.number_of_features = 0
+        self.scaling = None
 
     def check_train_data(self, X, y):
         """Check input data for training
