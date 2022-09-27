@@ -18,8 +18,8 @@ class ChoquisticRegression:
             Dictionary, describing all fitted parameters (scaling, threshold,
             moebius coefficients) in the following manner:
             {'gamma': scaling, 'beta': threshold, frozenset({1}): m({1}),...}
-
     """
+
     def __init__(self, additivity, parameters):
         self.additivity = additivity
         self.scaling = parameters['gamma']
@@ -40,8 +40,8 @@ class ChoquisticRegression:
         regression value: float
             Probability of positive class, computed by the choquistic
             regression model.
-
         """
+
         choquet_integral = ChoquetIntegral(self.additivity, self.moebius_coefficients)
 
         gamma = self.scaling

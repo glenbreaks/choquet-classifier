@@ -3,7 +3,7 @@ import numpy as np
 
 class FeatureTransformation2:
     """Feature Transformation
-    Funtion f(x)=(f_0(x_0),...,f_{m-1}(x_{m-1})) to normalize the train
+    Function f(x)=(f_0(x_0),...,f_{m-1}(x_{m-1})) to normalize the train
     data, where m is the number of features. Use the item and call
     operator to get the value for a specific x_i.
     Example: f[1](5) is equivalent to f_1(5) for x_i=5
@@ -18,7 +18,7 @@ class FeatureTransformation2:
         self.normalized = self._initialize(X)
 
     def _initialize(self, X):
-        """Initialize the funtion.
+        """Initialize the function.
         Create an array of shape (1, n_features), where n_features is
         the number of features. Each index stores an instance of the
         class _FeatureTransformationComponent describing a component f_i
@@ -30,7 +30,7 @@ class FeatureTransformation2:
         Returns:
         ----------
         array : ndarray of shape (, n_features)
-            Array containing a _FeatureTransformationCompoent f_i for
+            Array containing a _FeatureTransformationComponent f_i for
             each feature.
         """
 
