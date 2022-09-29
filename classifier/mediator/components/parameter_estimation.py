@@ -140,7 +140,7 @@ class ParameterEstimation:
         number_of_moebius_coefficients = self._get_number_of_moebius_coefficients()
 
         # set the bounds - order is: gamma, threshold, m(T_1),...,m(T_n) with n being
-        lower_bound = [1, 0]
+        lower_bound = [0.1, 0]
         upper_bound = [np.inf, 1]
 
         for i in range(number_of_moebius_coefficients):
@@ -189,6 +189,7 @@ class ParameterEstimation:
 
         monotonicity_matrix = np.array(matrix)
 
+        #monotonicity_matrix = np.array([[1,0,0,1,1,0,1],[0,1,0,1,0,1,1],[0,0,1,0,1,1,1]])
         return monotonicity_matrix
 
     def _get_linear_constraint_matrix(self):
