@@ -27,14 +27,23 @@ class TestChoquetIntegral(unittest.TestCase):
             self.assertAlmostEqual(choquet_integral.compute_utility_value(X[i]), integrated_values[i], places=6)
 
     def test_feature_minima(self):
-        X_full = [[.4, .3, .6], [2, 3, 4], [3, 4, 5], [4, 5, 6]]
-        X = [1, 2, 3]
-        y = [0, 1]
+        X = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
+        y = [0, 0, 0, 1]
 
-        moebius_transform = [0.4, 0.3, 0.2, 0.2, 0.6, 0.1, 0.2]
-        choquet_integral = ChoquetIntegral(4, moebius_transform)
-        result = choquet_integral.feature_minima_of_instance([.4, 0, .6, 0.3])
-        print(result)
+        additivity = 3
+        number_of_instances = np.shape(X)[0]
+
+        moebius_coefficients = [0.32621127227372915, 0.1096778349966972, 0.14071448801729294, 0.2181001452983398,
+                                0.06220493806514601, 0.1071507113468563, 0.035940610001938655]
+
+        choquet_integral = ChoquetIntegral(additivity, moebius_coefficients)
+
+        for i in range(number_of_instances):
+            x = X[i]
+            expected_minima_dict = {1: x[0], 2: x[1], 3: x[2], 4: min(x[0], x[1]), 5: min(x[0], x[2]),
+                                    6: min(x[1], x[2]), 7: min(x[0], x[1], x[2])}
+            actual_minima_dict = choquet_integral.feature_minima_of_instance(x)
+            self.assertDictEqual(expected_minima_dict, actual_minima_dict)
 
 
 if __name__ == '__main__':
