@@ -30,7 +30,7 @@ class Fitter:
             Instance of the fitted feature transformation.
         """
 
-        feature_transformation = FeatureTransformation2(X)
+        feature_transformation = FeatureTransformation(X)
 
         return feature_transformation
 

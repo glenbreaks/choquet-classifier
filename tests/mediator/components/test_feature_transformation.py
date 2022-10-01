@@ -13,6 +13,12 @@ class TestFeatureTransformation(unittest.TestCase):
         f = FeatureTransformation(data)
         np.testing.assert_almost_equal(f.normalized, normalized_data, 5)
 
+    def test_feature_trans(self):
+        data = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
+        f = FeatureTransformation(data)
+        inst = np.array([0.3, 0.3, 0.4])
+        print(f[0], f([inst]))
+
     def test_redundant_data(self):
         data = np.array([[1, 2, 4], [1, 1, 2], [3, 3, 1], [3, 4, 2], [5, 1, 3]])
         normalized_data = np.array([[0., 0.5], [0., 0.], [0.625, 0.75], [0.625, 1], [1., 0]])

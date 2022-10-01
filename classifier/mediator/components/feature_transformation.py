@@ -36,7 +36,7 @@ class FeatureTransformation:
                     Array containing a _FeatureTransformationComponent f_i for
                     each feature.
                 """
-        self.transformer = QuantileTransformer(n_quantiles=np.shape(X)[0])
+        self.transformer = QuantileTransformer(n_quantiles=np.shape(X)[0], random_state=0)
         return self.transformer.fit_transform(X)
 
     def __getitem__(self, i):

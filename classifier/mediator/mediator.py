@@ -198,37 +198,4 @@ class Mediator:
             Normalized input data, where n_samples is the number of samples
             and n_features the number of features.
         """
-
-        result = list()
-
-        for x in X:
-            normalized_x = self._get_normalized_x(x, f)
-
-            result.append(normalized_x)
-
-        return np.array(result)
-
-    def _get_normalized_x(self, x, f):
-        """Normalize example using a Feature Transformation.
-        Parameters
-        -------
-        x : array-like of shape (1, n_features)
-            Example, where n_features is the number of features.
-        f : FeatureTransformation
-            Feature Transformation.
-        Returns
-        -------
-        normalized_x : ndarray
-            Normalized example.
-        """
-
-        normalized_x = list()
-        number_of_features = len(x)
-
-        for i in range(number_of_features):
-            feature = x[i]
-            normalized_feature = f[i](feature)
-
-            normalized_x.append(normalized_feature)
-
-        return np.array(normalized_x)
+        return f(X)
