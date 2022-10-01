@@ -96,14 +96,14 @@ class TestParameterEstimation(unittest.TestCase):
         X = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
         y = [0, 0, 0, 1]
 
-        p = est.ParameterEstimation(X, y, 3, 100)
+        p = est.ParameterEstimation(X, y, 3, 1)
         parameter_dict = p.compute_parameters()
         # self.assertAlmostEqual(parameter_dict['beta'], 0.4)
         print(p.compute_parameters())
 
     def test_monotonicity_from_moebius_coefficients(self):
         X = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
-        y = [0, 0, 1, 1]
+        y = [0, 0, 0, 1]
 
         additivity = 3
         number_of_features = np.shape(X)[1]
@@ -120,7 +120,7 @@ class TestParameterEstimation(unittest.TestCase):
         coefficient_values = list(moebius_dict.values())
         capacity_of_highest_subset = np.sum(coefficient_values)
         self.assertAlmostEqual(capacity_of_highest_subset, 1)
-
+        #print(coefficient_values)
         capacity_c1 = coefficient_values[0]
         capacity_c2 = coefficient_values[1]
         capacity_c3 = coefficient_values[2]
@@ -129,6 +129,7 @@ class TestParameterEstimation(unittest.TestCase):
         capacity_c1_c3 = capacity_c1 + capacity_c3 + coefficient_values[4]
         capacity_c2_c3 = capacity_c2 + capacity_c3 + coefficient_values[5]
 
+        print(capacity_c1, capacity_c2, capacity_c3, capacity_c1_c2, capacity_c1_c3, capacity_c2_c3, capacity_of_highest_subset)
         self.assertEqual((capacity_c1_c2 >= capacity_c1) & (capacity_c1_c2 >= capacity_c2), True)
         self.assertEqual((capacity_c1_c3 >= capacity_c1) & (capacity_c1_c3 >= capacity_c3), True)
         self.assertEqual((capacity_c2_c3 >= capacity_c2) & (capacity_c2_c3 >= capacity_c3), True)
