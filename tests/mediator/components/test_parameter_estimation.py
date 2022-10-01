@@ -45,11 +45,9 @@ class TestParameterEstimation(unittest.TestCase):
                                                       number_of_features - 1) * number_of_features - number_of_features
 
         powersets = h.get_powerset_dictionary(list(range(1, number_of_features + 1)), additivity)
-
         p = est.ParameterEstimation(X, y, additivity, 1)
         number_of_moebius_coefficients = p._get_number_of_moebius_coefficients()
         monotonicity_matrix = p.get_monotonicity_matrix()
-
         self.assertEqual(number_of_monotonicity_constraints, np.shape(monotonicity_matrix)[0])
 
         monotonicity_sets_matrix = []
@@ -76,16 +74,14 @@ class TestParameterEstimation(unittest.TestCase):
         additivity = 3
         number_of_features = np.shape(X)[1]
         number_of_linear_constraints = np.power(2, number_of_features - 1) * number_of_features - \
-                                             number_of_features + 1
+                                       number_of_features + 1
 
         p = est.ParameterEstimation(X, y, additivity, 1)
         number_of_parameters = p._get_number_of_moebius_coefficients() + 2
         linear_constraint_matrix = p._get_linear_constraint_matrix()
 
         self.assertEqual(number_of_linear_constraints, np.shape(linear_constraint_matrix)[0])
-        self.assertEqual(number_of_parameters,np.shape(linear_constraint_matrix)[1])
-
-
+        self.assertEqual(number_of_parameters, np.shape(linear_constraint_matrix)[1])
 
     def test_log_likelihood(self):
         X = [[1, 2, 3, 5], [2, 3, 4, 1], [3, 4, 5, 2], [4, 5, 6, 6]]
@@ -100,19 +96,48 @@ class TestParameterEstimation(unittest.TestCase):
         X = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
         y = [0, 0, 0, 1]
 
-        p = est.ParameterEstimation(X, y, 3, 1)
+        p = est.ParameterEstimation(X, y, 3, 100)
         parameter_dict = p.compute_parameters()
-        #self.assertAlmostEqual(parameter_dict['beta'], 0.4)
+        # self.assertAlmostEqual(parameter_dict['beta'], 0.4)
         print(p.compute_parameters())
 
-    def test_capacity_from_moebius_coefficients(self):
-        pass
+    def test_monotonicity_from_moebius_coefficients(self):
+        X = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
+        y = [0, 0, 1, 1]
+
+        additivity = 3
+        number_of_features = np.shape(X)[1]
+        number_of_monotonicity_constraints = np.power(2,
+                                                      number_of_features - 1) * number_of_features - number_of_features
+
+        p = est.ParameterEstimation(X, y, additivity, 1)
+        parameter_dict = p.compute_parameters()
+
+        moebius_coefficents = [frozenset({1}), frozenset({2}), frozenset({3}), frozenset({1, 2}),
+                               frozenset({1, 3}), frozenset({2, 3}), frozenset({1, 2, 3})]
+        moebius_dict = {key: parameter_dict[key] for key in moebius_coefficents}
+
+        coefficient_values = list(moebius_dict.values())
+        capacity_of_highest_subset = np.sum(coefficient_values)
+        self.assertAlmostEqual(capacity_of_highest_subset, 1)
+
+        capacity_c1 = coefficient_values[0]
+        capacity_c2 = coefficient_values[1]
+        capacity_c3 = coefficient_values[2]
+
+        capacity_c1_c2 = capacity_c1 + capacity_c2 + coefficient_values[3]
+        capacity_c1_c3 = capacity_c1 + capacity_c3 + coefficient_values[4]
+        capacity_c2_c3 = capacity_c2 + capacity_c3 + coefficient_values[5]
+
+        self.assertEqual((capacity_c1_c2 >= capacity_c1) & (capacity_c1_c2 >= capacity_c2), True)
+        self.assertEqual((capacity_c1_c3 >= capacity_c1) & (capacity_c1_c3 >= capacity_c3), True)
+        self.assertEqual((capacity_c2_c3 >= capacity_c2) & (capacity_c2_c3 >= capacity_c3), True)
 
     def test_l1_regularization(self):
         X = [[.25, .3, .7, .1], [.5, .625, .4, .75], [.35, .4, .5, .4], [.125, .5, .625, .6]]
         y = [1, 1, 1, 0]
 
-        moebius_coefficient = [1, 1, 1, 1]
+        moebius_coefficient = [0.3, 0.3, 0.2, 0.2]
         p = est.ParameterEstimation(X, y, 1, 1)
 
         print(p._l1_regularization(moebius_coefficient))
