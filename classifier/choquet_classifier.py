@@ -24,15 +24,15 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
         with n = n_features, coefficients. The default value 1 represents a simple additive measure with no interaction
         between features.
 
-    regularization_parameter: in, default=None
+    regularization: in, default=None
         the regularization parameter of the L1-Regularization in the parameter estimation. Determines the strength of
         regularization of the fitting process.
     """
 
-    def __init__(self, additivity=1, regularization_parameter=None):
+    def __init__(self, additivity=1, regularization=None):
         self.mediator_ = None
         self.additivity = additivity
-        self.regularization_parameter = regularization_parameter
+        self.regularization_parameter = regularization
 
     def fit(self, X, y):
         """Initialize the parameters of the Choquet classifier
@@ -101,8 +101,7 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
 
     def get_params(self, deep=True):
         return {'additivity': self.additivity,
-                'scaling': self.mediator_.scaling,
-                'threshold': self.mediator_.threshold}
+                'regularization': self.regularization}
 
     def _more_tags(self):
         return {'binary_only': True, 'poor_score': True}
