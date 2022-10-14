@@ -50,11 +50,6 @@ def get_subset_dictionary_list(s, additivity):
     return dict_list
 
 
-def get_max_subsets(s, additivity):
-    max_subsets = [x for x in get_subset_dictionary_list(s, additivity)]
-    return max_subsets
-
-
 def _get_additivity_powerset(items, additivity):
     result = list()
 

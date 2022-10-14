@@ -51,15 +51,11 @@ class TestHelper(unittest.TestCase):
         self.assertListEqual(list(powerset), expected_powerset)
 
     def test_subset_dictionary(self):
-        s1 = {1, 2, 3, 4}
-        s = frozenset({1, 2})
-        list = h.get_subset_dictionary_list(s1, 2)
-        print(list)
-
-    def test_max_subsets(self):
         s = {1, 2, 3, 4}
-        max_subsets = h.get_max_subsets(s, 3)
-        print(max_subsets)
+        additivity = 2
+
+        subset_dict_list = h.get_subset_dictionary_list(s, additivity)
+        print(subset_dict_list)
 
     def test_get_feature_subset(self):
         array_1 = np.array([4, 21, 1, 6, 9])
