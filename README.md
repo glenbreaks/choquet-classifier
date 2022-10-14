@@ -1,4 +1,4 @@
-# choquet-classifier
+# Choquet-classifier
 ## Installation
 ## Usage
 ## Licence

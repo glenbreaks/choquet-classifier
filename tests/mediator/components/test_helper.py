@@ -12,20 +12,19 @@ class TestHelper(unittest.TestCase):
 
         powerset1 = h.get_powerset(s, 4)
         expected_powerset1 = [frozenset(), frozenset([2]), frozenset([4]), frozenset([6]), frozenset([8]),
-                             frozenset([2, 4]),  frozenset([2, 6]),  frozenset([2, 8]),  frozenset([4, 6]),
-                             frozenset([4, 8]),  frozenset([6, 8]), frozenset([2, 4, 6]),  frozenset([2, 4, 8]),
-                             frozenset([2, 6, 8]),  frozenset([4, 6, 8]),  frozenset([2, 4, 6, 8])]
+                              frozenset([2, 4]), frozenset([2, 6]), frozenset([2, 8]), frozenset([4, 6]),
+                              frozenset([4, 8]), frozenset([6, 8]), frozenset([2, 4, 6]), frozenset([2, 4, 8]),
+                              frozenset([2, 6, 8]), frozenset([4, 6, 8]), frozenset([2, 4, 6, 8])]
 
         self.assertCountEqual(list(powerset1), expected_powerset1)
 
         # test additivity powerset
         powerset2 = h.get_powerset(s, additivity=2)
         expected_powerset2 = [frozenset(), frozenset([2]), frozenset([4]), frozenset([6]), frozenset([8]),
-                             frozenset([2, 4]), frozenset([2, 6]), frozenset([2, 8]), frozenset([4, 6]),
-                             frozenset([4, 8]), frozenset([6, 8])]
+                              frozenset([2, 4]), frozenset([2, 6]), frozenset([2, 8]), frozenset([4, 6]),
+                              frozenset([4, 8]), frozenset([6, 8])]
 
         self.assertCountEqual(list(powerset2), expected_powerset2)
-
 
     def test_powerset_dictionary(self):
         s = {1, 2, 3, 4}
@@ -42,18 +41,23 @@ class TestHelper(unittest.TestCase):
             self.assertEqual(powerset_dict[key], expected_powerset_list[key - 1])
 
     def test_additivity_powerset(self):
-        s = [1,2,3]
-        powerset = h._get_additivity_powerset(s, 2)
-        print(powerset)
+        s = [1, 2, 3]
+        additivity = 2
+
+        powerset = h._get_additivity_powerset(s, additivity)
+        expected_powerset = [frozenset(), frozenset({1}), frozenset({2}), frozenset({3}),
+                             frozenset({1, 2}), frozenset({1, 3}), frozenset({2, 3})]
+
+        self.assertListEqual(list(powerset), expected_powerset)
 
     def test_subset_dictionary(self):
         s1 = {1, 2, 3, 4}
         s = frozenset({1, 2})
-        list = h.get_subset_dictionary_list(s1 , 2)
+        list = h.get_subset_dictionary_list(s1, 2)
         print(list)
 
     def test_max_subsets(self):
-        s = {1,2,3,4}
+        s = {1, 2, 3, 4}
         max_subsets = h.get_max_subsets(s, 3)
         print(max_subsets)
 
