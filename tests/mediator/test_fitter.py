@@ -9,7 +9,7 @@ class TestEstimator(unittest.TestCase):
 			 [6, 2, 65, 2, 4],
 			 [-7, 0.1, 55.3, 5, 10]]
 
-		print(Fitter().fit_feature_transformation(X))
+		print(Fitter().fit_feature_transformation(X)[0])
 
 if __name__ == '__main__':
 	unittest.main()

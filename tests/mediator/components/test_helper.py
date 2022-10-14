@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+from itertools import chain, combinations
 
 from classifier.mediator.components import helper as h
 
@@ -28,8 +29,17 @@ class TestHelper(unittest.TestCase):
 
     def test_powerset_dictionary(self):
         s = {1, 2, 3, 4}
-        powerset1 = h.get_powerset_dictionary(s, 2)
-        print(powerset1)
+        additivity = 2
+
+        powerset_dict = h.get_powerset_dictionary(s, additivity)
+        expected_powerset = chain.from_iterable(combinations(s, r) for r in range(1, additivity + 1))
+
+        expected_powerset_list = []
+        for item in expected_powerset:
+            expected_powerset_list.append(frozenset(item))
+
+        for key, item in powerset_dict.items():
+            self.assertEqual(powerset_dict[key], expected_powerset_list[key - 1])
 
     def test_additivity_powerset(self):
         s = [1,2,3]
