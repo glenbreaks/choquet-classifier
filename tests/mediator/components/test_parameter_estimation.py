@@ -129,7 +129,6 @@ class TestParameterEstimation(unittest.TestCase):
         capacity_c1_c3 = capacity_c1 + capacity_c3 + coefficient_values[4]
         capacity_c2_c3 = capacity_c2 + capacity_c3 + coefficient_values[5]
 
-        print(capacity_c1, capacity_c2, capacity_c3, capacity_c1_c2, capacity_c1_c3, capacity_c2_c3, capacity_of_highest_subset)
         self.assertEqual((capacity_c1_c2 >= capacity_c1) & (capacity_c1_c2 >= capacity_c2), True)
         self.assertEqual((capacity_c1_c3 >= capacity_c1) & (capacity_c1_c3 >= capacity_c3), True)
         self.assertEqual((capacity_c2_c3 >= capacity_c2) & (capacity_c2_c3 >= capacity_c3), True)

@@ -30,9 +30,9 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
     """
 
     def __init__(self, additivity=1, regularization=None):
-        self.mediator_ = None
+        #self.mediator_ = None
         self.additivity = additivity
-        self.regularization_parameter = regularization
+        self.regularization = regularization
 
     def fit(self, X, y):
         """Initialize the parameters of the Choquet classifier
@@ -61,7 +61,7 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
 
         self.classes_, y = np.unique(y, return_inverse=True)
 
-        self.mediator_.fit_components(X, y, self.additivity, self.regularization_parameter)
+        self.mediator_.fit_components(X, y, self.additivity, self.regularization)
 
         self.n_features_in_ = self.mediator_.number_of_features
 
