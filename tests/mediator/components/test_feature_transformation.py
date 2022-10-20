@@ -14,8 +14,8 @@ class TestFeatureTransformation(unittest.TestCase):
         np.testing.assert_almost_equal(f.normalized, normalized_data, 5)
 
     def test_feature_trans(self):
-        data = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
-        f = FeatureTransformation(data)
+        X = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
+        f = FeatureTransformation(X)
         inst = np.array([0.3, 0.3, 0.4])
         print(f[0], f([inst]))
 
