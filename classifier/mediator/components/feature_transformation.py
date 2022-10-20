@@ -2,8 +2,7 @@ import numpy as np
 
 from sklearn.preprocessing import QuantileTransformer
 
-#TODO n_quantiles parameter
-#TODO make feature transformation callable
+
 class FeatureTransformation:
     """Feature Transformation
 

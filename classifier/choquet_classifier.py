@@ -29,8 +29,7 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
         regularization of the fitting process.
     """
 
-    def __init__(self, additivity=1, regularization=None):
-        #self.mediator_ = None
+    def __init__(self, additivity=2, regularization=None):
         self.additivity = additivity
         self.regularization = regularization
 

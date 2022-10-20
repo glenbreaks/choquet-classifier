@@ -3,7 +3,6 @@ import unittest
 from sklearn.utils.estimator_checks import check_estimator
 from classifier.choquet_classifier import ChoquetClassifier
 
-# TODO: make check_estimator attainable
 class TestChoquetClassifier(unittest.TestCase):
     def test_compatibility(self):
         cc = ChoquetClassifier()
