@@ -49,7 +49,7 @@ class Fitter:
 
         additivity : int or None.
             Additivity of fuzzy measure. If None, additivity will
-            be set to 1 (no interaction between features) to estimate parameters.
+            be set to 2 to estimate parameters.
 
         regularization_parameter : float or None
             the regularization parameter of the L1-Regularization.
@@ -64,7 +64,7 @@ class Fitter:
         """
 
         if additivity is None:
-            additivity = 1
+            additivity = 2
         else:
             additivity = additivity
 

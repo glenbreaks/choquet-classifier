@@ -52,7 +52,7 @@ class TestHelper(unittest.TestCase):
 
     def test_subset_dictionary(self):
         s = {1, 2, 3, 4}
-        additivity = 2
+        additivity = 3
 
         subset_dict_list = h.get_subset_dictionary_list(s, additivity)
         print(subset_dict_list)

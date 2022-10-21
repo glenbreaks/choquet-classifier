@@ -189,7 +189,6 @@ class ParameterEstimation:
 
         monotonicity_matrix = np.array(matrix)
 
-        #monotonicity_matrix = np.array([[1,0,0,1,1,0,1],[0,1,0,1,0,1,1],[0,0,1,0,1,1,1]])
         return monotonicity_matrix
 
     def _get_linear_constraint_matrix(self):

@@ -21,8 +21,8 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
         The additivity of the underlying fuzzy measure. Additivity takes interaction between features into account,
         i.e. the additivity value determines the maximum number of interacting features and hence the maximum
         number of moebius coefficients to be estimated. More precisely, with a k-additive measure, sum_i (n over i),
-        with n = n_features, coefficients. The default value 1 represents a simple additive measure with no interaction
-        between features.
+        with n = n_features, coefficients. The value 1 represents a simple additive measure with no interaction
+        between features. The default value 2 represents a simple interaction between 2 features.
 
     regularization: in, default=None
         the regularization parameter of the L1-Regularization in the parameter estimation. Determines the strength of
@@ -92,8 +92,6 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
 
         return self.classes_[result]
 
-    #def predict_proba(self, X):
-    #    pass
     # ===============================================================
     # Functions for compatibility with scikit-learn. Not for general usage
     # ===============================================================

@@ -1,5 +1,5 @@
 import numpy as np
-from itertools import chain, combinations, islice
+from itertools import chain, combinations
 
 
 def get_feature_subset(x, index):
