@@ -48,6 +48,7 @@ class TestParameterEstimation(unittest.TestCase):
         p = est.ParameterEstimation(X, y, additivity, 1)
         number_of_moebius_coefficients = p._get_number_of_moebius_coefficients()
         monotonicity_matrix = p.get_monotonicity_matrix()
+
         self.assertEqual(number_of_monotonicity_constraints, np.shape(monotonicity_matrix)[0])
 
         monotonicity_sets_matrix = []

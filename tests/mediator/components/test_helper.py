@@ -50,12 +50,23 @@ class TestHelper(unittest.TestCase):
 
         self.assertListEqual(list(powerset), expected_powerset)
 
-    def test_subset_dictionary(self):
+    def test_subset_dictionary_list(self):
         s = {1, 2, 3, 4}
         additivity = 3
 
         subset_dict_list = h.get_subset_dictionary_list(s, additivity)
-        print(subset_dict_list)
+        expected_dict_list = [{1: frozenset({1}), 2: frozenset({2}), 5: frozenset({1, 2})},
+                              {1: frozenset({1}), 3: frozenset({3}), 6: frozenset({1, 3})},
+                              {1: frozenset({1}), 4: frozenset({4}), 7: frozenset({1, 4})},
+                              {2: frozenset({2}), 3: frozenset({3}), 8: frozenset({2, 3})},
+                              {2: frozenset({2}), 4: frozenset({4}), 9: frozenset({2, 4})},
+                              {3: frozenset({3}), 4: frozenset({4}), 10: frozenset({3, 4})},
+                              {1: frozenset({1}), 2: frozenset({2}), 3: frozenset({3}), 5: frozenset({1, 2}), 6: frozenset({1, 3}), 8: frozenset({2, 3}), 11: frozenset({1, 2, 3})},
+                              {1: frozenset({1}), 2: frozenset({2}), 4: frozenset({4}), 5: frozenset({1, 2}), 7: frozenset({1, 4}), 9: frozenset({2, 4}), 12: frozenset({1, 2, 4})},
+                              {1: frozenset({1}), 3: frozenset({3}), 4: frozenset({4}), 6: frozenset({1, 3}), 7: frozenset({1, 4}), 10: frozenset({3, 4}), 13: frozenset({1, 3, 4})},
+                              {2: frozenset({2}), 3: frozenset({3}), 4: frozenset({4}), 8: frozenset({2, 3}), 9: frozenset({2, 4}), 10: frozenset({3, 4}), 14: frozenset({2, 3, 4})}]
+
+        self.assertListEqual(subset_dict_list, expected_dict_list)
 
     def test_get_feature_subset(self):
         array_1 = np.array([4, 21, 1, 6, 9])
