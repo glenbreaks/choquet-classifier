@@ -84,23 +84,13 @@ class TestParameterEstimation(unittest.TestCase):
         self.assertEqual(number_of_linear_constraints, np.shape(linear_constraint_matrix)[0])
         self.assertEqual(number_of_parameters, np.shape(linear_constraint_matrix)[1])
 
-    def test_log_likelihood(self):
-        X = [[1, 2, 3, 5], [2, 3, 4, 1], [3, 4, 5, 2], [4, 5, 6, 6]]
-        y = [1, 0, 1, 0]
-
-        parameters = np.array([1, 2, 1, 1, 1, 1])
-
-        p = est.ParameterEstimation(X, y, 2, 1)
-        print(p._log_likelihood_function(parameters))
-
     def test_compute_parameters(self):
         X = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
         y = [0, 0, 0, 1]
 
-        p = est.ParameterEstimation(X, y, 2, 1)
+        p = est.ParameterEstimation(X, y, 2, 0.001)
         parameter_dict = p.compute_parameters()
-        # self.assertAlmostEqual(parameter_dict['beta'], 0.4)
-        print(p.compute_parameters())
+        self.assertAlmostEqual(parameter_dict['beta'], 0.49458, places=5)
 
     def test_monotonicity_from_moebius_coefficients(self):
         X = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
@@ -114,14 +104,14 @@ class TestParameterEstimation(unittest.TestCase):
         p = est.ParameterEstimation(X, y, additivity, 1)
         parameter_dict = p.compute_parameters()
 
-        moebius_coefficents = [frozenset({1}), frozenset({2}), frozenset({3}), frozenset({1, 2}),
-                               frozenset({1, 3}), frozenset({2, 3}), frozenset({1, 2, 3})]
-        moebius_dict = {key: parameter_dict[key] for key in moebius_coefficents}
+        moebius_coefficients = [frozenset({1}), frozenset({2}), frozenset({3}), frozenset({1, 2}),
+                                frozenset({1, 3}), frozenset({2, 3}), frozenset({1, 2, 3})]
+        moebius_dict = {key: parameter_dict[key] for key in moebius_coefficients}
 
         coefficient_values = list(moebius_dict.values())
         capacity_of_highest_subset = np.sum(coefficient_values)
         self.assertAlmostEqual(capacity_of_highest_subset, 1)
-        #print(coefficient_values)
+
         capacity_c1 = coefficient_values[0]
         capacity_c2 = coefficient_values[1]
         capacity_c3 = coefficient_values[2]
@@ -141,7 +131,7 @@ class TestParameterEstimation(unittest.TestCase):
         moebius_coefficient = [0.3, 0.3, 0.2, 0.2]
         p = est.ParameterEstimation(X, y, 1, 1)
 
-        print(p._l1_regularization(moebius_coefficient))
+        self.assertEqual(1.0, p._l1_regularization(moebius_coefficient))
 
 
 if __name__ == '__main__':

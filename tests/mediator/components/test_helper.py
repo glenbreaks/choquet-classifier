@@ -88,7 +88,6 @@ class TestHelper(unittest.TestCase):
 
         expected_permutation_1 = {1: 3, 2: 1, 3: 4, 4: 5, 5: 2}
         permutation_1 = h._get_permutation_position(array_1, sorted_array_1)
-        print(permutation_1)
         self.assertDictEqual(permutation_1, expected_permutation_1)
 
 
