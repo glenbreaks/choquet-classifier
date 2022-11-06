@@ -1,7 +1,6 @@
 import numpy as np
 
 from .components.feature_transformation import FeatureTransformation
-from .components.feature_transformation2 import FeatureTransformation2
 from .components.parameter_estimation import ParameterEstimation
 
 
