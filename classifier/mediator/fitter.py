@@ -69,7 +69,7 @@ class Fitter:
             additivity = additivity
 
         if regularization_parameter is None:
-            regularization_parameter = 1
+            regularization_parameter = 0.001
         else:
             regularization_parameter = regularization_parameter
 

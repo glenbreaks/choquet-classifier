@@ -97,7 +97,7 @@ class TestParameterEstimation(unittest.TestCase):
         X = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
         y = [0, 0, 0, 1]
 
-        p = est.ParameterEstimation(X, y, 3, 1)
+        p = est.ParameterEstimation(X, y, 2, 1)
         parameter_dict = p.compute_parameters()
         # self.assertAlmostEqual(parameter_dict['beta'], 0.4)
         print(p.compute_parameters())
