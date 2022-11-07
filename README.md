@@ -13,7 +13,11 @@ Implementation of the Choquet classifier. This model was presented in "Learning 
 
 ### User installation
 - clone this repository or
-- pip installation will be added soon
+- Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the Choquet classifier.
+
+```bash
+pip install choquet-classifier-glenscalai
+```
 
 # Usage
 The application is compatible to [scikit-learn](https://scikit-learn.org/stable/) and can be used like every other classifier from the scikit-learn library. In order to use the Choquet classifier, import the class **ChoquetClassifier** from the module **choquet_classifier** from the package **classifier**. Some examples are shown below:
