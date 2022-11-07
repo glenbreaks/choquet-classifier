@@ -24,10 +24,10 @@ The application is compatible to [scikit-learn](https://scikit-learn.org/stable/
 
 ## Default example
 
-Use the contructor and the function **fit** to initialize the Choquet classifier for a given dataset.
+Use the constructor and the function **fit** to initialize the Choquet classifier for a given dataset.
 
 ```python
->>> from classifier.choquet_classifier import ChoquetClassifier
+>>> from choquet_classifier import ChoquetClassifier
 >>> X = [[1, 3, 2],
 ...      [1, 0, 3]]
 >>> y = [1, 0]
@@ -46,7 +46,7 @@ array([0, 0])
 ## Examples with hyper-parameters
 
 ```python
->>> from classifier.choquet_classifier import ChoquetClassifier
+>>> from choquet_classifier import ChoquetClassifier
 >>> X = [[1, 3, 2],
 ...      [1, 0, 3]]
 >>> y = [1, 0]
@@ -69,7 +69,7 @@ The classes do not have to be labeled with 0 and 1; any integer numbers or strin
 The first example contains the class labels 2 and 1. Label 2 is assigned to the positive class and label 1 is assigned to the negative class since 2>1.
 
 ```python
->>> from classifier.choquet_classifier import ChoquetClassifier
+>>> from choquet_classifier import ChoquetClassifier
 >>> X = [[1, 3, 2],
 ...      [1, 0, 3]]
 >>> y = [2, 1]
@@ -84,7 +84,7 @@ array([1, 1])
 The second example contains the class labels 'one' and 'two'. Label 'one' is assigned to the negative class and label 'two' is assigned to the positive class because 'one' comes lexicographically first.
 
 ```python
->>> from classifier.choquet_classifier import ChoquetClassifier
+>>> from choquet_classifier import ChoquetClassifier
 >>> X = [[1, 3, 2],
 ...      [1, 0, 3]]
 >>> y = ['two', 'one']
