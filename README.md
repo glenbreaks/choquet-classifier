@@ -1,7 +1,6 @@
 # Choquet-classifier
 
 Implementation of the Choquet classifier. This model was presented in "Learning monotone nonlinear models using the Choquet integral" [[1]](#1)
-- 🚧Under Construction🚧
 
 ## Installation
 
