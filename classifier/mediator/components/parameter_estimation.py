@@ -179,11 +179,11 @@ class ParameterEstimation:
         number_of_moebius_coefficients = self._get_number_of_moebius_coefficients()
         set_list = h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)), self.additivity)
         matrix = []
-        for j in set_list:
-            max_subset = list(j.values())[-1]
+        for set in set_list:
+            max_subset = list(set.values())[-1]
             for criterion in max_subset:
                 arr = np.zeros(number_of_moebius_coefficients)
-                intersection_sets = [key for key, value in j.items() if len(value.intersection({criterion})) > 0]
+                intersection_sets = [key for key, value in set.items() if len(value.intersection({criterion})) > 0]
                 monotonicity_array = [1 if index + 1 in intersection_sets else 0 for index, x in enumerate(arr)]
                 matrix.append(monotonicity_array)
 
