@@ -1,3 +1,4 @@
+
 import numpy as np
 
 from .mediator.mediator import Mediator
@@ -103,4 +104,49 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
     def _more_tags(self):
         return {'binary_only': True, 'poor_score': True, "no_validation": True,
                 "_xfail_checks": {"check_classifiers_one_label": "Model does not work on one label yet"}}
+
+    def fit_predict(self, X, y):
+        """Fit the estimator and predict classes for X
+
+        Fit the estimator using the given training data and labels, and predict the class labels for all samples in X.
+
+        Parameters
+        ------
+        X : array-like of shape (n_samples, n_features)
+            Input data, where n_samples is the number of samples and
+            n_features is the number of features. The number of features
+            has to be more or equal to the additivity.
+
+        y : array-like of shape (n_samples,)
+            Target labels to X.
+
+        Returns
+        ------
+        result : array-like of shape (n_samples,)
+                The predicted classes.
+        """
+        self.fit(X, y)
+        return self.predict(X)
+
+    def score(self, X, y):
+        """Return the mean accuracy on the given test data and labels
+
+        Parameters
+        ------
+        X : array-like of shape (n_samples, n_features)
+            Input data, where n_samples is the number of samples and
+            n_features is the number of features.
+
+        y : array-like of shape (n_samples,)
+            Target labels to X.
+
+        Returns
+        ------
+        score : float
+                Mean accuracy of self.predict(X) wrt. y.
+        """
+        check_is_fitted(self)
+        X = self.mediator_.check_test_data(X)
+        result = self.mediator_.predict_classes(X)
+        return np.mean(result == y)
 
