@@ -127,65 +127,58 @@ class ParameterEstimation:
         return parameter_dict
 
     def _set_constraints(self):
-        """ Set up the bounds and linear constraints for the optimization problem
-            using the Bounds and Constraints classes from scipy.optimize.
+        """ Set up the bounds and linear constraints for the optimization problem.
 
         Returns
         -------
-        bounds, constraints: Bounds, LinearConstraints
-            Returns the datatypes Bounds and LinearConstraints,
-            used for the optimization problem.
+        bounds, constraints: Bounds, LinearConstraint
+            Returns the datatypes Bounds and LinearConstraint for the optimization problem.
         """
 
-        number_of_moebius_coefficients = self._get_number_of_moebius_coefficients()
+        num_moebius_coeff = self._get_number_of_moebius_coefficients()
 
-        # set the bounds - order is: gamma, threshold, m(T_1),...,m(T_n) with n being
-        lower_bound = [0.1, 0]
-        upper_bound = [np.inf, 1]
-
-        for i in range(number_of_moebius_coefficients):
-            lower_bound.append(0)
-            upper_bound.append(1)
+        # Bounds setup using list comprehension for scalability and readability
+        lower_bound = [0.1, 0] + [0] * num_moebius_coeff
+        upper_bound = [np.inf, 1] + [1] * num_moebius_coeff
 
         bounds = opt.Bounds(lower_bound, upper_bound)
 
         linear_constraint_matrix = self._get_linear_constraint_matrix()
 
-        lower_boundary_limit, upper_boundary_limit = ([1], [1])
-        lower_limits = np.concatenate((lower_boundary_limit, np.zeros(linear_constraint_matrix.shape[0] - 1)), axis=0)
-        upper_limits = np.concatenate((upper_boundary_limit, np.ones(linear_constraint_matrix.shape[0] - 1)), axis=0)
+        # Simplified boundary limits
+        lower_limits = np.zeros(linear_constraint_matrix.shape[0])
+        upper_limits = np.ones(linear_constraint_matrix.shape[0])
 
-        lower_limits = lower_limits.flatten()
-        upper_limits = upper_limits.flatten()
+        # Setting the first element separately for clarity
+        lower_limits[0], upper_limits[0] = 1, 1
 
         linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
 
         return bounds, linear_constraint
 
     def get_monotonicity_matrix(self):
-        """Set the needed monotonicity constraints for all
-        moebius coefficients
+        """Set the monotonicity constraints for all Moebius coefficients.
 
-        Create all monotonicity constraints for the optimization
-        problem and aggregate them in a matrix.
+        Create all monotonicity constraints for the optimization problem and
+        aggregate them in a matrix.
 
         Returns
         -------
-        monotonicity_matrix: array-like of shape (n_monotonicity_constraints, n_moebius_coefficients)
-            The matrix representing all monotonicity constraints
-            for moebius coefficients.
+        monotonicity_matrix: array-like
+            Shape: (n_monotonicity_constraints, n_moebius_coefficients)
+            The matrix representing all monotonicity constraints for Moebius coefficients.
         """
 
-        number_of_moebius_coefficients = self._get_number_of_moebius_coefficients()
-        set_list = h.get_subset_dictionary_list(list(range(1, self.number_of_features + 1)), self.additivity)
+        num_moebius_coeffs = self._get_number_of_moebius_coefficients()
+        set_list = h.get_subset_dictionary_list(range(1, self.number_of_features + 1), self.additivity)
+
         matrix = []
-        for set in set_list:
-            max_subset = list(set.values())[-1]
+        for subset in set_list:
+            max_subset = list(subset.values())[-1]
             for criterion in max_subset:
-                arr = np.zeros(number_of_moebius_coefficients)
-                intersection_sets = [key for key, value in set.items() if len(value.intersection({criterion})) > 0]
-                monotonicity_array = [1 if index + 1 in intersection_sets else 0 for index, x in enumerate(arr)]
-                matrix.append(monotonicity_array)
+                row = [(1 if (index + 1) in subset and criterion in subset[index + 1] else 0) for index in
+                       range(num_moebius_coeffs)]
+                matrix.append(row)
 
         monotonicity_matrix = np.array(matrix)
 
@@ -210,8 +203,7 @@ class ParameterEstimation:
         boundary_constraint = np.ones(self._get_number_of_moebius_coefficients())
 
         linear_constraint_matrix = np.concatenate(([boundary_constraint], monotonicity_matrix), axis=0)
-        linear_constraint_matrix = np.insert(linear_constraint_matrix, 0, values=0, axis=1)
-        linear_constraint_matrix = np.insert(linear_constraint_matrix, 0, values=0, axis=1)
+        linear_constraint_matrix = np.insert(np.insert(linear_constraint_matrix, 0, values=0, axis=1), 0, values=0, axis=1)
 
         return linear_constraint_matrix
 
