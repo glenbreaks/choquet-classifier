@@ -1,12 +1,10 @@
 
 import numpy as np
+from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.utils.validation import check_is_fitted
 from typing import Optional
 
 from .mediator.mediator import Mediator
-
-from sklearn.base import BaseEstimator
-from sklearn.base import ClassifierMixin
-from sklearn.utils.validation import check_is_fitted
 
 
 class ChoquetClassifier(BaseEstimator, ClassifierMixin):
@@ -132,7 +130,7 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
         self.fit(X, y)
         return self.predict(X)
 
-    def score(self, X, y):
+    def score(self, X, y, sample_weight=None):
         """Return the mean accuracy on the given test data and labels
 
         Parameters
