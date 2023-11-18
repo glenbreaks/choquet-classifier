@@ -1,5 +1,6 @@
 
 import numpy as np
+from typing import Optional
 
 from .mediator.mediator import Mediator
 
@@ -11,10 +12,10 @@ from sklearn.utils.validation import check_is_fitted
 class ChoquetClassifier(BaseEstimator, ClassifierMixin):
     """The Choquet classifier
 
-    Implementation of the Choquet classifier, which was introduced in
+    Implementation of the Choquet classifier,introduced in
     "Learning monotone nonlinear models using the Choquet integral", using the Moebius transform
-    presentation of the underlying fuzzy measure.
-    This classifier is compatible to scikit-learn, i.e. it can be used like any scikit-learn estimator.
+    presentation for fuzzy measures. This classifier is compatible
+    to scikit-learn, i.e. it can be used like any scikit-learn estimator.
 
     Parameters
     -------
@@ -30,11 +31,11 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
         regularization of the fitting process.
     """
 
-    def __init__(self, additivity=2, regularization=None):
+    def __init__(self, additivity: int = 2, regularization: Optional[float] = None) -> None:
         self.additivity = additivity
         self.regularization = regularization
 
-    def fit(self, X, y):
+    def fit(self, X: np.ndarray, y: np.ndarray) -> "ChoquetClassifier":
         """Initialize the parameters of the Choquet classifier
 
         Initialize the feature transformation and the parameters: threshold, scaling and moebius transform of
@@ -67,7 +68,7 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
 
         return self
 
-    def predict(self, X):
+    def predict(self, X: np.ndarray) -> np.ndarray:
         """Predict classes for X
 
         Predict the class labels for all samples in X, which were
@@ -97,15 +98,18 @@ class ChoquetClassifier(BaseEstimator, ClassifierMixin):
     # Functions for compatibility with scikit-learn. Not for general usage
     # ===============================================================
 
-    def get_params(self, deep=True):
-        return {'additivity': self.additivity,
-                'regularization': self.regularization}
+    def get_params(self, deep: bool = True) -> dict:
+        return {"additivity": self.additivity, "regularization": self.regularization}
 
-    def _more_tags(self):
-        return {'binary_only': True, 'poor_score': True, "no_validation": True,
-                "_xfail_checks": {"check_classifiers_one_label": "Model does not work on one label yet"}}
+    def _more_tags(self) -> dict:
+        return {
+            "binary_only": True,
+            "poor_score": True,
+            "no_validation": True,
+            "_xfail_checks": {"check_classifiers_one_label": "Model does not work on one label yet"},
+        }
 
-    def fit_predict(self, X, y):
+    def fit_predict(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
         """Fit the estimator and predict classes for X
 
         Fit the estimator using the given training data and labels, and predict the class labels for all samples in X.
