@@ -2,7 +2,7 @@ import numpy as np
 
 from .fitter import Fitter
 from .predictor import Predictor
-
+from typing import Tuple
 from sklearn.utils.validation import check_X_y
 from sklearn.utils.validation import check_array
 
@@ -14,11 +14,16 @@ class Mediator:
     of the Choquet classifier and does the classification.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.number_of_features = 0
         self.scaling = None
+        self.threshold = None
+        self.moebius_transform = None
+        self.parameters = None
+        self.feature_transformation = None
+        self.additivity = None
 
-    def check_train_data(self, X, y):
+    def check_train_data(self, X, y) -> Tuple[np.ndarray, np.ndarray]:
         """Check input data for training
 
         Compare 'check_X_y" in the documentation of scikit-learn for more information
@@ -48,7 +53,7 @@ class Mediator:
 
         return X, y
 
-    def check_test_data(self, X):
+    def check_test_data(self, X) -> np.ndarray:
         """Check the input data for classification
 
         Compare 'check_array' in scikit-learn documentation for more information
@@ -76,7 +81,7 @@ class Mediator:
 
         return X
 
-    def fit_components(self, X, y, additivity, regularization_parameter):
+    def fit_components(self, X, y, additivity, regularization_parameter) -> bool:
         """Fit the feature transformation and the parameters: threshold, scaling and moebius transform of
         the capacity for a given input data.
 
@@ -122,7 +127,7 @@ class Mediator:
 
         return True
 
-    def predict_classes(self, X):
+    def predict_classes(self, X) -> np.ndarray:
         """Predict classes for input data.
 
         Predict classes for input data. The function fit_components
@@ -149,7 +154,7 @@ class Mediator:
 
         return result.ravel()
 
-    def _check_for_regression_targets(self, y):
+    def _check_for_regression_targets(self, y) -> bool:
         """Check target data for regression targets.
 
         Regression targets are considered to be real non integer numbers.
@@ -183,7 +188,7 @@ class Mediator:
         for key, value in moebius_coefficient.items():
             print(key, '->', value)
 
-    def _get_normalized_X(self, X, f):
+    def _get_normalized_X(self, X, f) -> np.ndarray:
         """Normalize the input data using a Feature Transformation.
         Parameters
         -------
