@@ -1,7 +1,7 @@
 import numpy as np
 from scipy import optimize as opt
 from math import comb
-
+from typing import Dict, Any, Tuple
 from . import helper as h
 from .choquet_integral import ChoquetIntegral
 
@@ -33,7 +33,7 @@ class ParameterEstimation:
             Determines the strength of regularization of the fitting process.
     """
 
-    def __init__(self, X, y, additivity, regularization_parameter=None):
+    def __init__(self, X, y, additivity, regularization_parameter=None) -> None:
         self.X = X
         self.y = y
 
@@ -47,7 +47,7 @@ class ParameterEstimation:
         # gamma, beta
         self.boundary_constraint = np.array([0, 0])
 
-    def _log_likelihood_function(self, parameters):
+    def _log_likelihood_function(self, parameters: np.array) -> float:
         """Log-Likelihood function which is subject to minimization.
 
         Takes a parameter array and calculates the utility value
@@ -87,7 +87,7 @@ class ParameterEstimation:
 
         return result
 
-    def compute_parameters(self):
+    def compute_parameters(self) -> Dict[str, Any]:
         """Function to solve the minimization problem, using the scipy-package.
 
         Uses the constructed bounds and linear constraints to build up
@@ -126,7 +126,7 @@ class ParameterEstimation:
         parameter_dict.update(moebius_dict)
         return parameter_dict
 
-    def _set_constraints(self):
+    def _set_constraints(self) -> Tuple[opt.Bounds, opt.LinearConstraint]:
         """ Set up the bounds and linear constraints for the optimization problem.
 
         Returns
@@ -156,7 +156,7 @@ class ParameterEstimation:
 
         return bounds, linear_constraint
 
-    def get_monotonicity_matrix(self):
+    def get_monotonicity_matrix(self) -> np.ndarray:
         """Set the monotonicity constraints for all Moebius coefficients.
 
         Create all monotonicity constraints for the optimization problem and
@@ -184,7 +184,7 @@ class ParameterEstimation:
 
         return monotonicity_matrix
 
-    def _get_linear_constraint_matrix(self):
+    def _get_linear_constraint_matrix(self) -> np.ndarray:
         """Set the linear constraint matrix needed for the scipy-optimize
         package.
 
@@ -207,7 +207,7 @@ class ParameterEstimation:
 
         return linear_constraint_matrix
 
-    def _get_number_of_moebius_coefficients(self):
+    def _get_number_of_moebius_coefficients(self) -> int:
         """Computes the number of needed moebius coefficients
         according to number of features and additivity.
 
@@ -225,7 +225,7 @@ class ParameterEstimation:
 
         return number_of_moebius_coefficients
 
-    def _l1_regularization(self, moebius_coefficients):
+    def _l1_regularization(self, moebius_coefficients: np.ndarray) -> float:
         """Calculates the l1-Regularizer in the log-likelihood
         function to prevent overfitting.
 
