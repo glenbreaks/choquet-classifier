@@ -7,32 +7,6 @@ from .choquet_integral import ChoquetIntegral
 
 
 class ParameterEstimation:
-    """Class to solve the optimization problem for given
-    data set X, y.
-
-    Parameters
-    -------
-    X : array-like of shape (n_samples, n_features)
-            Input data, where n_samples is the number of samples and
-            n_features is the number of features. The number of features
-            has to be more or equal to the additivity.
-
-    y : array-like of shape (n_samples,)
-            Target labels to X.
-
-    additivity : int, default=1
-            The additivity of the underlying fuzzy measure. Additivity takes interaction
-            between features into account, i.e. the additivity value determines the maximum
-            number of interacting features and hence the maximum number of moebius coefficients
-            to be estimated. More precisely, with a k-additive measure, sum_i (n over i),
-            with n = n_features, coefficients. The default value 1 represents
-            a simple additive measure with no interaction between features.
-
-    regularization_parameter: in, default=None
-            the regularization parameter of the L1-Regularization in the parameter estimation.
-            Determines the strength of regularization of the fitting process.
-    """
-
     def __init__(self, X, y, additivity, regularization_parameter=None) -> None:
         self.X = X
         self.y = y
@@ -48,25 +22,6 @@ class ParameterEstimation:
         self.boundary_constraint = np.array([0, 0])
 
     def _log_likelihood_function(self, parameters: np.array) -> float:
-        """Log-Likelihood function which is subject to minimization.
-
-        Takes a parameter array and calculates the utility value
-        of every instance x of given data set X and employs
-        all parameters, instances and corresponding labels
-        into the log-likelihood function.
-
-        Parameters
-        -------
-        parameters: array-like of shape, (1, n_parameters)
-            Array containing all parameters to be optimized.
-            Order: [scaling, threshold, [moebius_coefficients]]
-
-        Returns
-        -------
-        result: float
-            The calculated value for the log-likelihood.
-        """
-
         gamma = parameters[0]
         beta = parameters[1]
         moebius_coefficients = parameters[2:]
@@ -88,25 +43,6 @@ class ParameterEstimation:
         return result
 
     def compute_parameters(self) -> Dict[str, Any]:
-        """Function to solve the minimization problem, using the scipy-package.
-
-        Uses the constructed bounds and linear constraints to build up
-        the whole optimization problem and sets a starting vector x0.
-        The minimize method of the optimize class of scipy is then
-        called with the log-likelihood, starting vector x0 and the bounds
-        and linear constraints. used method is "trust-constr"
-
-        Returns
-        ----------
-        function: dict
-            Containing keys corresponding to parameters: gamma, beta and subsets of [m]. The values are the
-            computed values
-
-        Notes
-        ----------
-        function has form of: function = {g: x, b: y, 1: m({1}), 2: m({2}),..., }
-        """
-
         bounds, constraints = self._set_constraints()
 
         # set random normalized starting vector
@@ -120,21 +56,17 @@ class ParameterEstimation:
         parameter_dict = {'gamma': result.x[0], 'beta': result.x[1]}
 
         moebius_results = result.x[2:]
-        moebius_dict = {subset: value for key1, subset in set_list.items()
-                        for value in moebius_results if key1 == np.where(moebius_results == value)[0] + 1}
+
+        # Create a mapping of index to subset
+        index_to_subset = {index: subset for index, subset in enumerate(set_list.values())}
+
+        # Efficiently construct moebius_dict using the mapping
+        moebius_dict = {index_to_subset[i]: moebius_results[i] for i in range(len(moebius_results))}
 
         parameter_dict.update(moebius_dict)
         return parameter_dict
 
     def _set_constraints(self) -> Tuple[opt.Bounds, opt.LinearConstraint]:
-        """ Set up the bounds and linear constraints for the optimization problem.
-
-        Returns
-        -------
-        bounds, constraints: Bounds, LinearConstraint
-            Returns the datatypes Bounds and LinearConstraint for the optimization problem.
-        """
-
         num_moebius_coeff = self._get_number_of_moebius_coefficients()
 
         # Bounds setup using list comprehension for scalability and readability
@@ -145,11 +77,9 @@ class ParameterEstimation:
 
         linear_constraint_matrix = self._get_linear_constraint_matrix()
 
-        # Simplified boundary limits
         lower_limits = np.zeros(linear_constraint_matrix.shape[0])
         upper_limits = np.ones(linear_constraint_matrix.shape[0])
 
-        # Setting the first element separately for clarity
         lower_limits[0], upper_limits[0] = 1, 1
 
         linear_constraint = opt.LinearConstraint(linear_constraint_matrix, lower_limits, upper_limits)
@@ -157,18 +87,6 @@ class ParameterEstimation:
         return bounds, linear_constraint
 
     def get_monotonicity_matrix(self) -> np.ndarray:
-        """Set the monotonicity constraints for all Moebius coefficients.
-
-        Create all monotonicity constraints for the optimization problem and
-        aggregate them in a matrix.
-
-        Returns
-        -------
-        monotonicity_matrix: array-like
-            Shape: (n_monotonicity_constraints, n_moebius_coefficients)
-            The matrix representing all monotonicity constraints for Moebius coefficients.
-        """
-
         num_moebius_coeffs = self._get_number_of_moebius_coefficients()
         set_list = h.get_subset_dictionary_list(range(1, self.number_of_features + 1), self.additivity)
 
@@ -185,20 +103,6 @@ class ParameterEstimation:
         return monotonicity_matrix
 
     def _get_linear_constraint_matrix(self) -> np.ndarray:
-        """Set the linear constraint matrix needed for the scipy-optimize
-        package.
-
-        Use monotonicity matrix and complement according to the
-        scipy template for LinearConstraints to use it
-        in the minimization problem. Adding boundary condition.
-
-        Returns
-        -------
-        linear_constraint_matrix: array-like of shape (n_linear_constraints, n_parameters)
-            The matrix representing all linear constraints
-            for needed parameters.
-        """
-
         monotonicity_matrix = self.get_monotonicity_matrix()
         boundary_constraint = np.ones(self._get_number_of_moebius_coefficients())
 
@@ -208,16 +112,6 @@ class ParameterEstimation:
         return linear_constraint_matrix
 
     def _get_number_of_moebius_coefficients(self) -> int:
-        """Computes the number of needed moebius coefficients
-        according to number of features and additivity.
-
-        Returns
-        -------
-        number_of_moebius_coefficients: int
-            Number of needed moebius coefficients for
-            given problem
-        """
-
         number_of_moebius_coefficients = 0
 
         for i in range(1, self.additivity + 1):
@@ -226,17 +120,4 @@ class ParameterEstimation:
         return number_of_moebius_coefficients
 
     def _l1_regularization(self, moebius_coefficients: np.ndarray) -> float:
-        """Calculates the l1-Regularizer in the log-likelihood
-        function to prevent overfitting.
-
-        Parameters
-        -------
-        moebius_coefficients: array-like of shape (1, n_moebius_coefficients)
-            Array containing all moebius coefficients
-
-        Returns
-        -------
-        The calculated L1-Regularization for given problem
-        """
-
         return self.regularization_parameter * sum(abs(coefficient) for coefficient in moebius_coefficients)

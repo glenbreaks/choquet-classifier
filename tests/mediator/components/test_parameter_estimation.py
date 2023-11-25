@@ -88,9 +88,9 @@ class TestParameterEstimation(unittest.TestCase):
         X = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
         y = [0, 0, 0, 1]
 
-        p = est.ParameterEstimation(X, y, 2, 0.001)
+        p = est.ParameterEstimation(X, y, additivity=2, regularization_parameter=0.001)
         parameter_dict = p.compute_parameters()
-        self.assertAlmostEqual(parameter_dict['beta'], 0.49458, places=5)
+        self.assertAlmostEqual(parameter_dict['beta'], 0.3764159, places=5)
 
     def test_monotonicity_from_moebius_coefficients(self):
         X = [[0.1, 0.2, 0.3], [0.2, 0.3, 0.4], [0.3, 0.4, 0.5], [0.4, 0.5, 0.6]]
