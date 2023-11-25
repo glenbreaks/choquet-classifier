@@ -49,9 +49,9 @@ class ParameterEstimation:
         x0 = np.concatenate(([1], np.ones(1 + self._get_number_of_moebius_coefficients())), axis=0)
         x0 = x0 / np.sum(x0)
 
+        # refactor the following line to avoid this warning from scipy: "Expected type 'dict | None', got 'LinearConstraint' instead" caused by the "constraints=" argument
         result = opt.minimize(self._log_likelihood_function, x0, options={'verbose': 1}, bounds=bounds,
-                              method='trust-constr', constraints=constraints)
-
+                              method='trust-constr', constraints=[constraints])
         set_list = h.get_powerset_dictionary(list(range(1, self.number_of_features + 1)), self.additivity)
         parameter_dict = {'gamma': result.x[0], 'beta': result.x[1]}
 
